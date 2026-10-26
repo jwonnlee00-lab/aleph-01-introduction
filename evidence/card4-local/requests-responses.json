@@ -1,0 +1,927 @@
+{
+  "fixtureOnly": true,
+  "actualUserKeysNotUsed": true,
+  "records": [
+    {
+      "case": "add without recent passkey denied",
+      "request": {
+        "method": "POST",
+        "path": "/api/passkeys/register/options",
+        "body": {
+          "name": "시험 예비 열쇠 B",
+          "storageLocation": "기기 자체"
+        }
+      },
+      "response": {
+        "status": 403,
+        "body": {
+          "error": "RECENT_PASSKEY_REQUIRED",
+          "message": "키 추가·삭제 전에 패스키로 다시 로그인해 주세요. 로그인 후 10분 동안 변경할 수 있습니다."
+        }
+      }
+    },
+    {
+      "case": "delete without passkey denied",
+      "request": {
+        "method": "POST",
+        "path": "/api/passkeys/delete",
+        "body": {
+          "credentialId": "mpuSLEPr4Aao0UQ4TvXzjnxKW-Ubpn44-p3adR1WYuk",
+          "confirmName": "시험 기본 열쇠 A"
+        }
+      },
+      "response": {
+        "status": 403,
+        "body": {
+          "error": "RECENT_PASSKEY_REQUIRED",
+          "message": "키 추가·삭제 전에 패스키로 다시 로그인해 주세요. 로그인 후 10분 동안 변경할 수 있습니다."
+        }
+      }
+    },
+    {
+      "case": "login challenge",
+      "request": {
+        "method": "POST",
+        "path": "/api/passkeys/login/options",
+        "body": {}
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "attemptId": "j2ljHrYEmkEgHFJKugrooPdD5gf6v27l9h_dW-2lU0c",
+          "options": {
+            "rpId": "localhost",
+            "challenge": "s7l5nfS_tqa0IB5udduwBfx6rK8KybHkeRxjdiISKks",
+            "timeout": 120000,
+            "userVerification": "required"
+          },
+          "expiresAt": 1792983260402
+        },
+        "setCookie": "[REDACTED]"
+      }
+    },
+    {
+      "case": "original key login succeeds",
+      "request": {
+        "method": "POST",
+        "path": "/api/passkeys/login/verify",
+        "Cookie": "[REDACTED]",
+        "body": {
+          "attemptId": "j2ljHrYEmkEgHFJKugrooPdD5gf6v27l9h_dW-2lU0c",
+          "credential": {
+            "id": "mpuSLEPr4Aao0UQ4TvXzjnxKW-Ubpn44-p3adR1WYuk",
+            "rawId": "mpuSLEPr4Aao0UQ4TvXzjnxKW-Ubpn44-p3adR1WYuk",
+            "type": "public-key",
+            "response": {
+              "clientDataJSON": "eyJ0eXBlIjoid2ViYXV0aG4uZ2V0IiwiY2hhbGxlbmdlIjoiczdsNW5mU190cWEwSUI1dWRkdXdCZng2cks4S3liSGtlUnhqZGlJU0trcyIsIm9yaWdpbiI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTE3MyIsImNyb3NzT3JpZ2luIjpmYWxzZX0",
+              "authenticatorData": "SZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2MFAAAAAQ",
+              "signature": "MEQCIH9hq8uZD8G33hUs-YceC3ota4RtFqyGZ_rUDSK1PxEmAiA38er_YzD7SGRy6sbti_ptMYWr51xr9ycDiC-KtiOCVg"
+            },
+            "clientExtensionResults": {}
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "verified": true,
+          "session": {
+            "type": "server-side",
+            "expiresAt": 1792986560421
+          },
+          "next": "/private"
+        },
+        "setCookie": "[REDACTED]"
+      }
+    },
+    {
+      "case": "second key registration options",
+      "request": {
+        "method": "POST",
+        "path": "/api/passkeys/register/options",
+        "Cookie": "[REDACTED]",
+        "body": {
+          "name": "시험 예비 열쇠 B",
+          "storageLocation": "기기 자체"
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "attemptId": "gmmbRvHaubugt5LgtXA73SGOUdB7FBP77aqqd-irglU",
+          "options": {
+            "challenge": "8HsiF_1UJM3Q9fJ4ugyePPiXuoMxB8g3WNMsRPPvje4",
+            "rp": {
+              "name": "정원의 나만의 자리",
+              "id": "localhost"
+            },
+            "user": {
+              "id": "NmpNbzM0eldza0xsdlB2ZFhVZ041V2lVNm5LMFVhVlMtc01VZjN2NEl2UQ",
+              "name": "site-owner",
+              "displayName": "사이트 소유자"
+            },
+            "pubKeyCredParams": [
+              {
+                "alg": -7,
+                "type": "public-key"
+              },
+              {
+                "alg": -257,
+                "type": "public-key"
+              }
+            ],
+            "timeout": 120000,
+            "attestation": "none",
+            "excludeCredentials": [
+              {
+                "id": "mpuSLEPr4Aao0UQ4TvXzjnxKW-Ubpn44-p3adR1WYuk",
+                "transports": [
+                  "internal"
+                ],
+                "type": "public-key"
+              }
+            ],
+            "authenticatorSelection": {
+              "residentKey": "required",
+              "userVerification": "required",
+              "requireResidentKey": true,
+              "authenticatorAttachment": "platform"
+            },
+            "extensions": {
+              "credProps": true
+            },
+            "hints": [
+              "client-device"
+            ]
+          },
+          "expiresAt": 1792983260445
+        },
+        "setCookie": "[REDACTED]"
+      }
+    },
+    {
+      "case": "register independent second public key",
+      "request": {
+        "method": "POST",
+        "path": "/api/passkeys/register/verify",
+        "Cookie": "[REDACTED]",
+        "body": {
+          "attemptId": "gmmbRvHaubugt5LgtXA73SGOUdB7FBP77aqqd-irglU",
+          "credential": {
+            "id": "xE4Rmn0CPsc9ICc5iT0Q8vPqRPC-JvPiiFjTqyngQkM",
+            "rawId": "xE4Rmn0CPsc9ICc5iT0Q8vPqRPC-JvPiiFjTqyngQkM",
+            "type": "public-key",
+            "response": {
+              "clientDataJSON": "eyJ0eXBlIjoid2ViYXV0aG4uY3JlYXRlIiwiY2hhbGxlbmdlIjoiOEhzaUZfMVVKTTNROWZKNHVneWVQUGlYdW9NeEI4ZzNXTk1zUlBQdmplNCIsIm9yaWdpbiI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTE3MyIsImNyb3NzT3JpZ2luIjpmYWxzZX0",
+              "attestationObject": "o2NmbXRkbm9uZWdhdHRTdG10oGhhdXRoRGF0YVikSZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2NFAAAAAAAAAAAAAAAAAAAAAAAAAAAAIMROEZp9Aj7HPSAnOYk9EPLz6kTwvibz4ohY06sp4EJDpQECAyYgASFYIL1aIi7xDaCGm1rs4t_pODVDyeBPOlBkyR2MuyCoDw8_IlggaSGy6gAhKIb8S25bA6iacyg9oW9oeL0UVa9d9tJwzYI",
+              "transports": [
+                "internal"
+              ]
+            },
+            "clientExtensionResults": {
+              "credProps": {
+                "rk": true
+              }
+            }
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "verified": true,
+          "passkey": {
+            "credentialId": "xE4Rmn0CPsc9ICc5iT0Q8vPqRPC-JvPiiFjTqyngQkM",
+            "name": "시험 예비 열쇠 B",
+            "publicKey": "pQECAyYgASFYIL1aIi7xDaCGm1rs4t_pODVDyeBPOlBkyR2MuyCoDw8_IlggaSGy6gAhKIb8S25bA6iacyg9oW9oeL0UVa9d9tJwzYI",
+            "publicKeyFormat": "COSE_Key / base64url",
+            "storageLocation": "기기 자체",
+            "deviceType": "singleDevice",
+            "backedUp": false,
+            "createdAt": 1792982960464
+          },
+          "message": "공개키를 저장했습니다. 비공개 자료는 아직 잠겨 있습니다."
+        }
+      }
+    },
+    {
+      "case": "two named dated keys",
+      "request": {
+        "method": "GET",
+        "path": "/api/passkeys",
+        "Cookie": "[REDACTED]"
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "generatedAt": "2026-10-26T02:49:20.489Z",
+          "publicKeyFormat": "COSE_Key / base64url",
+          "storageLocationSource": "등록자가 선택한 위치. 실제 기기 저장 위치는 직접 확인 필요",
+          "passkeys": [
+            {
+              "credential_id": "xE4Rmn0CPsc9ICc5iT0Q8vPqRPC-JvPiiFjTqyngQkM",
+              "name": "시험 예비 열쇠 B",
+              "public_key": "pQECAyYgASFYIL1aIi7xDaCGm1rs4t_pODVDyeBPOlBkyR2MuyCoDw8_IlggaSGy6gAhKIb8S25bA6iacyg9oW9oeL0UVa9d9tJwzYI",
+              "counter": 0,
+              "transports": "[\"internal\"]",
+              "device_type": "singleDevice",
+              "backed_up": 0,
+              "storage_location": "기기 자체",
+              "created_at": 1792982960464
+            },
+            {
+              "credential_id": "mpuSLEPr4Aao0UQ4TvXzjnxKW-Ubpn44-p3adR1WYuk",
+              "name": "시험 기본 열쇠 A",
+              "public_key": "pQECAyYgASFYIBdMlZ_CTsPNd43YT7YGynRdE7OX8tOTH2FLFtdbav4OIlggtRYJUt1tf28dEMp1KHEDGQDAvP1SlIWgFUBDQffhHa8",
+              "counter": 1,
+              "transports": "[\"internal\"]",
+              "device_type": "singleDevice",
+              "backed_up": 0,
+              "storage_location": "기기 자체",
+              "created_at": 1792982960294
+            }
+          ],
+          "attempts": [
+            {
+              "id": "gmmbRvHaubugt5LgtXA73SGOUdB7FBP77aqqd-irglU",
+              "challenge": "8HsiF_1UJM3Q9fJ4ugyePPiXuoMxB8g3WNMsRPPvje4",
+              "name": "시험 예비 열쇠 B",
+              "storage_location": "기기 자체",
+              "state": "verified",
+              "created_at": 1792982960445,
+              "expires_at": 1792983260445,
+              "request_json": "{\"attemptId\":\"gmmbRvHaubugt5LgtXA73SGOUdB7FBP77aqqd-irglU\",\"credential\":{\"id\":\"xE4Rmn0CPsc9ICc5iT0Q8vPqRPC-JvPiiFjTqyngQkM\",\"rawId\":\"xE4Rmn0CPsc9ICc5iT0Q8vPqRPC-JvPiiFjTqyngQkM\",\"type\":\"public-key\",\"response\":{\"clientDataJSON\":\"eyJ0eXBlIjoid2ViYXV0aG4uY3JlYXRlIiwiY2hhbGxlbmdlIjoiOEhzaUZfMVVKTTNROWZKNHVneWVQUGlYdW9NeEI4ZzNXTk1zUlBQdmplNCIsIm9yaWdpbiI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTE3MyIsImNyb3NzT3JpZ2luIjpmYWxzZX0\",\"attestationObject\":\"o2NmbXRkbm9uZWdhdHRTdG10oGhhdXRoRGF0YVikSZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2NFAAAAAAAAAAAAAAAAAAAAAAAAAAAAIMROEZp9Aj7HPSAnOYk9EPLz6kTwvibz4ohY06sp4EJDpQECAyYgASFYIL1aIi7xDaCGm1rs4t_pODVDyeBPOlBkyR2MuyCoDw8_IlggaSGy6gAhKIb8S25bA6iacyg9oW9oeL0UVa9d9tJwzYI\",\"transports\":[\"internal\"]},\"clientExtensionResults\":{\"credProps\":{\"rk\":true}}}}",
+              "credential_id": "xE4Rmn0CPsc9ICc5iT0Q8vPqRPC-JvPiiFjTqyngQkM",
+              "failure_code": null
+            },
+            {
+              "id": "6DUmL8hfXEtTg2g4DGXpbDr5SiWc2CzBU8WkbRRMIo4",
+              "challenge": "Xoxd6he7MMrqcnKyJ5UWuF8VEfhsUwC1h7UYO_attnk",
+              "name": "카드 3 소프트웨어 시험 열쇠",
+              "storage_location": "기기 자체",
+              "state": "verified",
+              "created_at": 1792982000047,
+              "expires_at": 1792982300047,
+              "request_json": "{\"attemptId\":\"6DUmL8hfXEtTg2g4DGXpbDr5SiWc2CzBU8WkbRRMIo4\",\"credential\":{\"id\":\"YLzzWsC5u-GGKb-nhsnY-hoJg7k6x8RP_aJkaSvXLNQ\",\"rawId\":\"YLzzWsC5u-GGKb-nhsnY-hoJg7k6x8RP_aJkaSvXLNQ\",\"type\":\"public-key\",\"response\":{\"clientDataJSON\":\"eyJ0eXBlIjoid2ViYXV0aG4uY3JlYXRlIiwiY2hhbGxlbmdlIjoiWG94ZDZoZTdNTXJxY25LeUo1VVd1RjhWRWZoc1V3QzFoN1VZT19hdHRuayIsIm9yaWdpbiI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTE3MyIsImNyb3NzT3JpZ2luIjpmYWxzZX0\",\"attestationObject\":\"o2NmbXRkbm9uZWdhdHRTdG10oGhhdXRoRGF0YVikSZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2NFAAAAAAAAAAAAAAAAAAAAAAAAAAAAIGC881rAubvhhim_p4bJ2PoaCYO5OsfET_2iZGkr1yzUpQECAyYgASFYIPDTK_mPskNI-KXZSH46xPi2rkV68mhyM1slfPaFBIGeIlggW0cQoQkvVYqjIMfihdttu2hodBP2LI53gA3QTxuD2Sk\",\"transports\":[\"internal\"]},\"clientExtensionResults\":{\"credProps\":{\"rk\":true}}}}",
+              "credential_id": "YLzzWsC5u-GGKb-nhsnY-hoJg7k6x8RP_aJkaSvXLNQ",
+              "failure_code": null
+            },
+            {
+              "id": "4CTWdCRjiaHvSw5HvGeld_PO8KOkSMCI7I-ncoEEV3Y",
+              "challenge": "pdirR0YyShw35qN9WO8JVD5sXtyZoKzNgvz19m1mg_E",
+              "name": "만료 시험",
+              "storage_location": "기기 자체",
+              "state": "expired",
+              "created_at": 1792977879631,
+              "expires_at": 1792977879643,
+              "request_json": null,
+              "credential_id": null,
+              "failure_code": null
+            },
+            {
+              "id": "yGhaO9hczBgqFj04rIBsEYAMwG6amGNDaN08TPXzsG0",
+              "challenge": "SQMh6ca1e4YAEx-pfxBTThWFFIWLEa26kgSUjcrewSc",
+              "name": "틀린 출처 시험",
+              "storage_location": "기기 자체",
+              "state": "rejected",
+              "created_at": 1792977879391,
+              "expires_at": 1792978179391,
+              "request_json": null,
+              "credential_id": null,
+              "failure_code": "VERIFICATION_FAILED"
+            },
+            {
+              "id": "yd7yTiUCYNStN25zMiJvlwoeFS4OjEvJCMY3sOVQMMk",
+              "challenge": "4iSqPAE3xbo091pDW1UAO-W4jAtFcWWMLsnrw7rHHRk",
+              "name": "틀린 질문 시험",
+              "storage_location": "기기 자체",
+              "state": "rejected",
+              "created_at": 1792977879148,
+              "expires_at": 1792978179148,
+              "request_json": null,
+              "credential_id": null,
+              "failure_code": "VERIFICATION_FAILED"
+            },
+            {
+              "id": "M6a8NNNdOEEG0NYAZxAUhK1fQAwmXrXb1C7kmOAGpcc",
+              "challenge": "S0bAOLRmQZkKpo-IHZJC5kJFO5DqXGDRt5S5BZqPerg",
+              "name": "로컬 소프트웨어 시험 열쇠",
+              "storage_location": "기기 자체",
+              "state": "verified",
+              "created_at": 1792977878439,
+              "expires_at": 1792978178439,
+              "request_json": "{\"attemptId\":\"M6a8NNNdOEEG0NYAZxAUhK1fQAwmXrXb1C7kmOAGpcc\",\"credential\":{\"id\":\"Dq0XaeOodsj0d2BLNmYHLbwmNDIBOiB2O4urscpiJ2k\",\"rawId\":\"Dq0XaeOodsj0d2BLNmYHLbwmNDIBOiB2O4urscpiJ2k\",\"type\":\"public-key\",\"response\":{\"clientDataJSON\":\"eyJ0eXBlIjoid2ViYXV0aG4uY3JlYXRlIiwiY2hhbGxlbmdlIjoiUzBiQU9MUm1RWmtLcG8tSUhaSkM1a0pGTzVEcVhHRFJ0NVM1QlpxUGVyZyIsIm9yaWdpbiI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTE3MyIsImNyb3NzT3JpZ2luIjpmYWxzZX0\",\"attestationObject\":\"o2NmbXRkbm9uZWdhdHRTdG10oGhhdXRoRGF0YVikSZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2NFAAAAAAAAAAAAAAAAAAAAAAAAAAAAIA6tF2njqHbI9HdgSzZmBy28JjQyATogdjuLq7HKYidppQECAyYgASFYIFVHyHxcRuam1_7lYVZSwwGaetdxMKbWvciFqIMmvbGBIlggyKsC4wQXchwAucQL045f9q-GYYB8GfHbIe9DVx7Wd7E\",\"transports\":[\"internal\"]},\"authenticatorAttachment\":\"platform\",\"clientExtensionResults\":{\"credProps\":{\"rk\":true}}}}",
+              "credential_id": "Dq0XaeOodsj0d2BLNmYHLbwmNDIBOiB2O4urscpiJ2k",
+              "failure_code": null
+            },
+            {
+              "id": "aBnc6mcY1SAw9B6alZsVHT6al3Au_fQpfNZ42nw583Y",
+              "challenge": "XvWH_-_Sv5S1k7ZU2ycvaXNTjuibRq7uYu4E04tZIwY",
+              "name": "테스트 질문 B",
+              "storage_location": "기기 자체",
+              "state": "cancelled",
+              "created_at": 1792977877843,
+              "expires_at": 1792978177843,
+              "request_json": null,
+              "credential_id": null,
+              "failure_code": null
+            },
+            {
+              "id": "lBGKXge7D3c0-XxUKn8DPOhqIIxB1t4LxAFe0TWTIac",
+              "challenge": "yP5w_QoaqH8AsI5K72V42xke-unG6hep1QL21WyZIUE",
+              "name": "테스트 질문 A",
+              "storage_location": "기기 자체",
+              "state": "superseded",
+              "created_at": 1792977877710,
+              "expires_at": 1792978177710,
+              "request_json": null,
+              "credential_id": null,
+              "failure_code": null
+            },
+            {
+              "id": "kWn6E6FqPzW_l8NSsVwXpo2ZqOLSLuSAb7DYvxKYBvk",
+              "challenge": "NWGOD7csZf1cXzkzvk5E2pgYxVQnp7mnQ0A4Vbghtgs",
+              "name": "manual-test",
+              "storage_location": "기기 자체",
+              "state": "expired",
+              "created_at": 1792977712432,
+              "expires_at": 1792978012432,
+              "request_json": null,
+              "credential_id": null,
+              "failure_code": null
+            }
+          ],
+          "events": [],
+          "canManage": true,
+          "currentCredentialId": "mpuSLEPr4Aao0UQ4TvXzjnxKW-Ubpn44-p3adR1WYuk",
+          "privateKeyStored": false
+        }
+      }
+    },
+    {
+      "case": "login challenge",
+      "request": {
+        "method": "POST",
+        "path": "/api/passkeys/login/options",
+        "Cookie": "[REDACTED]",
+        "body": {}
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "attemptId": "WeC6t-4324ZlHMaqqkAmLgzypcoj-V_nLGeifIN6qpc",
+          "options": {
+            "rpId": "localhost",
+            "challenge": "yOWQzMaz3r7rwMujUonR_Dq0XGw6xnkfaXfuXOu5bJU",
+            "timeout": 120000,
+            "userVerification": "required"
+          },
+          "expiresAt": 1792983260494
+        },
+        "setCookie": "[REDACTED]"
+      }
+    },
+    {
+      "case": "backup key login succeeds before deletion",
+      "request": {
+        "method": "POST",
+        "path": "/api/passkeys/login/verify",
+        "Cookie": "[REDACTED]",
+        "body": {
+          "attemptId": "WeC6t-4324ZlHMaqqkAmLgzypcoj-V_nLGeifIN6qpc",
+          "credential": {
+            "id": "xE4Rmn0CPsc9ICc5iT0Q8vPqRPC-JvPiiFjTqyngQkM",
+            "rawId": "xE4Rmn0CPsc9ICc5iT0Q8vPqRPC-JvPiiFjTqyngQkM",
+            "type": "public-key",
+            "response": {
+              "clientDataJSON": "eyJ0eXBlIjoid2ViYXV0aG4uZ2V0IiwiY2hhbGxlbmdlIjoieU9XUXpNYXozcjdyd011alVvblJfRHEwWEd3Nnhua2ZhWGZ1WE91NWJKVSIsIm9yaWdpbiI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTE3MyIsImNyb3NzT3JpZ2luIjpmYWxzZX0",
+              "authenticatorData": "SZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2MFAAAAAQ",
+              "signature": "MEYCIQCY8K5oNvc39kJJ48Y8SdOzl-kYRoQ0L4tKYb5Yy_bbBAIhAP9Fy-2euG7GHMBnAbYEPgyfo5Vuu4Yxr_jwDiT4Z99S"
+            },
+            "clientExtensionResults": {}
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "verified": true,
+          "session": {
+            "type": "server-side",
+            "expiresAt": 1792986560508
+          },
+          "next": "/private"
+        },
+        "setCookie": "[REDACTED]"
+      }
+    },
+    {
+      "case": "wrong confirmation name rejected",
+      "request": {
+        "method": "POST",
+        "path": "/api/passkeys/delete",
+        "Cookie": "[REDACTED]",
+        "body": {
+          "credentialId": "xE4Rmn0CPsc9ICc5iT0Q8vPqRPC-JvPiiFjTqyngQkM",
+          "confirmName": "wrong name"
+        }
+      },
+      "response": {
+        "status": 409,
+        "body": {
+          "error": "CONFIRMATION_MISMATCH",
+          "message": "삭제할 패스키 이름을 다시 확인해 주세요."
+        }
+      }
+    },
+    {
+      "case": "delete backup key B",
+      "request": {
+        "method": "POST",
+        "path": "/api/passkeys/delete",
+        "Cookie": "[REDACTED]",
+        "body": {
+          "credentialId": "xE4Rmn0CPsc9ICc5iT0Q8vPqRPC-JvPiiFjTqyngQkM",
+          "confirmName": "시험 예비 열쇠 B"
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "deleted": true,
+          "name": "시험 예비 열쇠 B",
+          "message": "이 키의 서버 공개키를 삭제하고 해당 세션을 폐기했습니다. 기기 관리자에 남은 키는 자동으로 지워지지 않지만 이 사이트에는 로그인할 수 없습니다."
+        }
+      }
+    },
+    {
+      "case": "deleted key session revoked",
+      "request": {
+        "method": "GET",
+        "path": "/api/private/items",
+        "Cookie": "[REDACTED]"
+      },
+      "response": {
+        "status": 401,
+        "body": {
+          "error": "AUTH_REQUIRED",
+          "message": "패스키 로그인이 필요합니다. 현재는 잠금 상태입니다."
+        }
+      }
+    },
+    {
+      "case": "one named key remains",
+      "request": {
+        "method": "GET",
+        "path": "/api/passkeys",
+        "Cookie": "[REDACTED]"
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "generatedAt": "2026-10-26T02:49:20.560Z",
+          "publicKeyFormat": "COSE_Key / base64url",
+          "storageLocationSource": "등록자가 선택한 위치. 실제 기기 저장 위치는 직접 확인 필요",
+          "passkeys": [
+            {
+              "credential_id": "mpuSLEPr4Aao0UQ4TvXzjnxKW-Ubpn44-p3adR1WYuk",
+              "name": "시험 기본 열쇠 A",
+              "public_key": "pQECAyYgASFYIBdMlZ_CTsPNd43YT7YGynRdE7OX8tOTH2FLFtdbav4OIlggtRYJUt1tf28dEMp1KHEDGQDAvP1SlIWgFUBDQffhHa8",
+              "counter": 1,
+              "transports": "[\"internal\"]",
+              "device_type": "singleDevice",
+              "backed_up": 0,
+              "storage_location": "기기 자체",
+              "created_at": 1792982960294
+            }
+          ],
+          "attempts": [
+            {
+              "id": "gmmbRvHaubugt5LgtXA73SGOUdB7FBP77aqqd-irglU",
+              "challenge": "8HsiF_1UJM3Q9fJ4ugyePPiXuoMxB8g3WNMsRPPvje4",
+              "name": "시험 예비 열쇠 B",
+              "storage_location": "기기 자체",
+              "state": "verified",
+              "created_at": 1792982960445,
+              "expires_at": 1792983260445,
+              "request_json": "{\"attemptId\":\"gmmbRvHaubugt5LgtXA73SGOUdB7FBP77aqqd-irglU\",\"credential\":{\"id\":\"xE4Rmn0CPsc9ICc5iT0Q8vPqRPC-JvPiiFjTqyngQkM\",\"rawId\":\"xE4Rmn0CPsc9ICc5iT0Q8vPqRPC-JvPiiFjTqyngQkM\",\"type\":\"public-key\",\"response\":{\"clientDataJSON\":\"eyJ0eXBlIjoid2ViYXV0aG4uY3JlYXRlIiwiY2hhbGxlbmdlIjoiOEhzaUZfMVVKTTNROWZKNHVneWVQUGlYdW9NeEI4ZzNXTk1zUlBQdmplNCIsIm9yaWdpbiI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTE3MyIsImNyb3NzT3JpZ2luIjpmYWxzZX0\",\"attestationObject\":\"o2NmbXRkbm9uZWdhdHRTdG10oGhhdXRoRGF0YVikSZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2NFAAAAAAAAAAAAAAAAAAAAAAAAAAAAIMROEZp9Aj7HPSAnOYk9EPLz6kTwvibz4ohY06sp4EJDpQECAyYgASFYIL1aIi7xDaCGm1rs4t_pODVDyeBPOlBkyR2MuyCoDw8_IlggaSGy6gAhKIb8S25bA6iacyg9oW9oeL0UVa9d9tJwzYI\",\"transports\":[\"internal\"]},\"clientExtensionResults\":{\"credProps\":{\"rk\":true}}}}",
+              "credential_id": "xE4Rmn0CPsc9ICc5iT0Q8vPqRPC-JvPiiFjTqyngQkM",
+              "failure_code": null
+            },
+            {
+              "id": "6DUmL8hfXEtTg2g4DGXpbDr5SiWc2CzBU8WkbRRMIo4",
+              "challenge": "Xoxd6he7MMrqcnKyJ5UWuF8VEfhsUwC1h7UYO_attnk",
+              "name": "카드 3 소프트웨어 시험 열쇠",
+              "storage_location": "기기 자체",
+              "state": "verified",
+              "created_at": 1792982000047,
+              "expires_at": 1792982300047,
+              "request_json": "{\"attemptId\":\"6DUmL8hfXEtTg2g4DGXpbDr5SiWc2CzBU8WkbRRMIo4\",\"credential\":{\"id\":\"YLzzWsC5u-GGKb-nhsnY-hoJg7k6x8RP_aJkaSvXLNQ\",\"rawId\":\"YLzzWsC5u-GGKb-nhsnY-hoJg7k6x8RP_aJkaSvXLNQ\",\"type\":\"public-key\",\"response\":{\"clientDataJSON\":\"eyJ0eXBlIjoid2ViYXV0aG4uY3JlYXRlIiwiY2hhbGxlbmdlIjoiWG94ZDZoZTdNTXJxY25LeUo1VVd1RjhWRWZoc1V3QzFoN1VZT19hdHRuayIsIm9yaWdpbiI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTE3MyIsImNyb3NzT3JpZ2luIjpmYWxzZX0\",\"attestationObject\":\"o2NmbXRkbm9uZWdhdHRTdG10oGhhdXRoRGF0YVikSZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2NFAAAAAAAAAAAAAAAAAAAAAAAAAAAAIGC881rAubvhhim_p4bJ2PoaCYO5OsfET_2iZGkr1yzUpQECAyYgASFYIPDTK_mPskNI-KXZSH46xPi2rkV68mhyM1slfPaFBIGeIlggW0cQoQkvVYqjIMfihdttu2hodBP2LI53gA3QTxuD2Sk\",\"transports\":[\"internal\"]},\"clientExtensionResults\":{\"credProps\":{\"rk\":true}}}}",
+              "credential_id": "YLzzWsC5u-GGKb-nhsnY-hoJg7k6x8RP_aJkaSvXLNQ",
+              "failure_code": null
+            },
+            {
+              "id": "4CTWdCRjiaHvSw5HvGeld_PO8KOkSMCI7I-ncoEEV3Y",
+              "challenge": "pdirR0YyShw35qN9WO8JVD5sXtyZoKzNgvz19m1mg_E",
+              "name": "만료 시험",
+              "storage_location": "기기 자체",
+              "state": "expired",
+              "created_at": 1792977879631,
+              "expires_at": 1792977879643,
+              "request_json": null,
+              "credential_id": null,
+              "failure_code": null
+            },
+            {
+              "id": "yGhaO9hczBgqFj04rIBsEYAMwG6amGNDaN08TPXzsG0",
+              "challenge": "SQMh6ca1e4YAEx-pfxBTThWFFIWLEa26kgSUjcrewSc",
+              "name": "틀린 출처 시험",
+              "storage_location": "기기 자체",
+              "state": "rejected",
+              "created_at": 1792977879391,
+              "expires_at": 1792978179391,
+              "request_json": null,
+              "credential_id": null,
+              "failure_code": "VERIFICATION_FAILED"
+            },
+            {
+              "id": "yd7yTiUCYNStN25zMiJvlwoeFS4OjEvJCMY3sOVQMMk",
+              "challenge": "4iSqPAE3xbo091pDW1UAO-W4jAtFcWWMLsnrw7rHHRk",
+              "name": "틀린 질문 시험",
+              "storage_location": "기기 자체",
+              "state": "rejected",
+              "created_at": 1792977879148,
+              "expires_at": 1792978179148,
+              "request_json": null,
+              "credential_id": null,
+              "failure_code": "VERIFICATION_FAILED"
+            },
+            {
+              "id": "M6a8NNNdOEEG0NYAZxAUhK1fQAwmXrXb1C7kmOAGpcc",
+              "challenge": "S0bAOLRmQZkKpo-IHZJC5kJFO5DqXGDRt5S5BZqPerg",
+              "name": "로컬 소프트웨어 시험 열쇠",
+              "storage_location": "기기 자체",
+              "state": "verified",
+              "created_at": 1792977878439,
+              "expires_at": 1792978178439,
+              "request_json": "{\"attemptId\":\"M6a8NNNdOEEG0NYAZxAUhK1fQAwmXrXb1C7kmOAGpcc\",\"credential\":{\"id\":\"Dq0XaeOodsj0d2BLNmYHLbwmNDIBOiB2O4urscpiJ2k\",\"rawId\":\"Dq0XaeOodsj0d2BLNmYHLbwmNDIBOiB2O4urscpiJ2k\",\"type\":\"public-key\",\"response\":{\"clientDataJSON\":\"eyJ0eXBlIjoid2ViYXV0aG4uY3JlYXRlIiwiY2hhbGxlbmdlIjoiUzBiQU9MUm1RWmtLcG8tSUhaSkM1a0pGTzVEcVhHRFJ0NVM1QlpxUGVyZyIsIm9yaWdpbiI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTE3MyIsImNyb3NzT3JpZ2luIjpmYWxzZX0\",\"attestationObject\":\"o2NmbXRkbm9uZWdhdHRTdG10oGhhdXRoRGF0YVikSZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2NFAAAAAAAAAAAAAAAAAAAAAAAAAAAAIA6tF2njqHbI9HdgSzZmBy28JjQyATogdjuLq7HKYidppQECAyYgASFYIFVHyHxcRuam1_7lYVZSwwGaetdxMKbWvciFqIMmvbGBIlggyKsC4wQXchwAucQL045f9q-GYYB8GfHbIe9DVx7Wd7E\",\"transports\":[\"internal\"]},\"authenticatorAttachment\":\"platform\",\"clientExtensionResults\":{\"credProps\":{\"rk\":true}}}}",
+              "credential_id": "Dq0XaeOodsj0d2BLNmYHLbwmNDIBOiB2O4urscpiJ2k",
+              "failure_code": null
+            },
+            {
+              "id": "aBnc6mcY1SAw9B6alZsVHT6al3Au_fQpfNZ42nw583Y",
+              "challenge": "XvWH_-_Sv5S1k7ZU2ycvaXNTjuibRq7uYu4E04tZIwY",
+              "name": "테스트 질문 B",
+              "storage_location": "기기 자체",
+              "state": "cancelled",
+              "created_at": 1792977877843,
+              "expires_at": 1792978177843,
+              "request_json": null,
+              "credential_id": null,
+              "failure_code": null
+            },
+            {
+              "id": "lBGKXge7D3c0-XxUKn8DPOhqIIxB1t4LxAFe0TWTIac",
+              "challenge": "yP5w_QoaqH8AsI5K72V42xke-unG6hep1QL21WyZIUE",
+              "name": "테스트 질문 A",
+              "storage_location": "기기 자체",
+              "state": "superseded",
+              "created_at": 1792977877710,
+              "expires_at": 1792978177710,
+              "request_json": null,
+              "credential_id": null,
+              "failure_code": null
+            },
+            {
+              "id": "kWn6E6FqPzW_l8NSsVwXpo2ZqOLSLuSAb7DYvxKYBvk",
+              "challenge": "NWGOD7csZf1cXzkzvk5E2pgYxVQnp7mnQ0A4Vbghtgs",
+              "name": "manual-test",
+              "storage_location": "기기 자체",
+              "state": "expired",
+              "created_at": 1792977712432,
+              "expires_at": 1792978012432,
+              "request_json": null,
+              "credential_id": null,
+              "failure_code": null
+            }
+          ],
+          "events": [
+            {
+              "name": "시험 예비 열쇠 B",
+              "action": "deleted",
+              "remaining_count": 1,
+              "created_at": 1792982960536
+            }
+          ],
+          "canManage": false,
+          "currentCredentialId": null,
+          "privateKeyStored": false
+        }
+      }
+    },
+    {
+      "case": "login challenge",
+      "request": {
+        "method": "POST",
+        "path": "/api/passkeys/login/options",
+        "Cookie": "[REDACTED]",
+        "body": {}
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "attemptId": "-RETMjonrEF2ey8EUkAanCy1gAiymGEFUQpv0sp02h8",
+          "options": {
+            "rpId": "localhost",
+            "challenge": "yKh07-KI4kkVrF_1dkwnS5PGDzDpJrGLEEVO2TUMnLE",
+            "timeout": 120000,
+            "userVerification": "required"
+          },
+          "expiresAt": 1792983260565
+        },
+        "setCookie": "[REDACTED]"
+      }
+    },
+    {
+      "case": "deleted key B signature rejected",
+      "request": {
+        "method": "POST",
+        "path": "/api/passkeys/login/verify",
+        "Cookie": "[REDACTED]",
+        "body": {
+          "attemptId": "-RETMjonrEF2ey8EUkAanCy1gAiymGEFUQpv0sp02h8",
+          "credential": {
+            "id": "xE4Rmn0CPsc9ICc5iT0Q8vPqRPC-JvPiiFjTqyngQkM",
+            "rawId": "xE4Rmn0CPsc9ICc5iT0Q8vPqRPC-JvPiiFjTqyngQkM",
+            "type": "public-key",
+            "response": {
+              "clientDataJSON": "eyJ0eXBlIjoid2ViYXV0aG4uZ2V0IiwiY2hhbGxlbmdlIjoieUtoMDctS0k0a2tWckZfMWRrd25TNVBHRHpEcEpyR0xFRVZPMlRVTW5MRSIsIm9yaWdpbiI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTE3MyIsImNyb3NzT3JpZ2luIjpmYWxzZX0",
+              "authenticatorData": "SZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2MFAAAAAg",
+              "signature": "MEUCIQCi0Z06H0z_VvbWscqs14OjYA9gcZ5MzNsQGYKh8-y7MgIgWbGYvD6PUxq96w8VuUUMQU_gDhHQoSnpfS3p8eg3vAI"
+            },
+            "clientExtensionResults": {}
+          }
+        }
+      },
+      "response": {
+        "status": 401,
+        "body": {
+          "error": "UNKNOWN_PASSKEY",
+          "message": "패스키 서명을 확인하지 못했습니다. 등록한 패스키로 다시 시도해 주세요."
+        }
+      }
+    },
+    {
+      "case": "login challenge",
+      "request": {
+        "method": "POST",
+        "path": "/api/passkeys/login/options",
+        "Cookie": "[REDACTED]",
+        "body": {}
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "attemptId": "iP8eMO5_flBxtBcyNU5tVE6wILFdIjIC9taxZXWcwn8",
+          "options": {
+            "rpId": "localhost",
+            "challenge": "kiXA-eC6P3KwcMyeZFn_vLkk90pLwT58WDsxpLftBI0",
+            "timeout": 120000,
+            "userVerification": "required"
+          },
+          "expiresAt": 1792983260587
+        },
+        "setCookie": "[REDACTED]"
+      }
+    },
+    {
+      "case": "remaining key A login succeeds",
+      "request": {
+        "method": "POST",
+        "path": "/api/passkeys/login/verify",
+        "Cookie": "[REDACTED]",
+        "body": {
+          "attemptId": "iP8eMO5_flBxtBcyNU5tVE6wILFdIjIC9taxZXWcwn8",
+          "credential": {
+            "id": "mpuSLEPr4Aao0UQ4TvXzjnxKW-Ubpn44-p3adR1WYuk",
+            "rawId": "mpuSLEPr4Aao0UQ4TvXzjnxKW-Ubpn44-p3adR1WYuk",
+            "type": "public-key",
+            "response": {
+              "clientDataJSON": "eyJ0eXBlIjoid2ViYXV0aG4uZ2V0IiwiY2hhbGxlbmdlIjoia2lYQS1lQzZQM0t3Y015ZVpGbl92TGtrOTBwTHdUNThXRHN4cExmdEJJMCIsIm9yaWdpbiI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTE3MyIsImNyb3NzT3JpZ2luIjpmYWxzZX0",
+              "authenticatorData": "SZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2MFAAAAAg",
+              "signature": "MEYCIQDtTDgTeXAITd_1Xy2JxhpBqkchIzJNFPvIDU3rAXxFuQIhAJ7tPYEVj0tsK_Mmve3o50ZZ0QMDqB_LzPsP2pFV6Ap0"
+            },
+            "clientExtensionResults": {}
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "verified": true,
+          "session": {
+            "type": "server-side",
+            "expiresAt": 1792986560598
+          },
+          "next": "/private"
+        },
+        "setCookie": "[REDACTED]"
+      }
+    },
+    {
+      "case": "remaining key opens three items",
+      "request": {
+        "method": "GET",
+        "path": "/api/private/items",
+        "Cookie": "[REDACTED]"
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "items": [
+            {
+              "id": "project",
+              "title": "준비 중인 프로젝트 메모",
+              "body": "가상 프로젝트 달빛: 퍼즐 풀이 기록장을 만들고, 주말마다 화면 하나씩 완성한다."
+            },
+            {
+              "id": "applications",
+              "title": "지원 계획",
+              "body": "가상 기업 별숲 연구소와 구름 공방의 공고를 비교하고, 연습용 포트폴리오를 정리한다."
+            },
+            {
+              "id": "reflection",
+              "title": "개인 회고",
+              "body": "연습 회고: 서두르기보다 작은 기능을 끝까지 확인하자. 다음에는 오류 응답부터 기록한다."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "case": "last key deletion blocked",
+      "request": {
+        "method": "POST",
+        "path": "/api/passkeys/delete",
+        "Cookie": "[REDACTED]",
+        "body": {
+          "credentialId": "mpuSLEPr4Aao0UQ4TvXzjnxKW-Ubpn44-p3adR1WYuk",
+          "confirmName": "시험 기본 열쇠 A"
+        }
+      },
+      "response": {
+        "status": 409,
+        "body": {
+          "error": "LAST_PASSKEY",
+          "message": "마지막 패스키는 삭제할 수 없습니다. 먼저 다른 저장 위치에 두 번째 패스키를 등록해 주세요."
+        }
+      }
+    },
+    {
+      "case": "stale login cannot delete keys",
+      "request": {
+        "method": "POST",
+        "path": "/api/passkeys/delete",
+        "Cookie": "[REDACTED]",
+        "body": {
+          "credentialId": "mpuSLEPr4Aao0UQ4TvXzjnxKW-Ubpn44-p3adR1WYuk",
+          "confirmName": "시험 기본 열쇠 A"
+        }
+      },
+      "response": {
+        "status": 403,
+        "body": {
+          "error": "RECENT_PASSKEY_REQUIRED",
+          "message": "키 추가·삭제 전에 패스키로 다시 로그인해 주세요. 로그인 후 10분 동안 변경할 수 있습니다."
+        }
+      }
+    },
+    {
+      "case": "login challenge",
+      "request": {
+        "method": "POST",
+        "path": "/api/passkeys/login/options",
+        "Cookie": "[REDACTED]",
+        "body": {}
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "attemptId": "JBim-kPcn6LYHyrszG1I5Y7b0giKvL5vIstj6jRPyNs",
+          "options": {
+            "rpId": "localhost",
+            "challenge": "moOvn_mLsOZ8tsgbvM138ejIy6e3hJfTz-jNe92Pj9I",
+            "timeout": 120000,
+            "userVerification": "required"
+          },
+          "expiresAt": 1792983260651
+        },
+        "setCookie": "[REDACTED]"
+      }
+    },
+    {
+      "case": "fresh reauthentication succeeds",
+      "request": {
+        "method": "POST",
+        "path": "/api/passkeys/login/verify",
+        "Cookie": "[REDACTED]",
+        "body": {
+          "attemptId": "JBim-kPcn6LYHyrszG1I5Y7b0giKvL5vIstj6jRPyNs",
+          "credential": {
+            "id": "mpuSLEPr4Aao0UQ4TvXzjnxKW-Ubpn44-p3adR1WYuk",
+            "rawId": "mpuSLEPr4Aao0UQ4TvXzjnxKW-Ubpn44-p3adR1WYuk",
+            "type": "public-key",
+            "response": {
+              "clientDataJSON": "eyJ0eXBlIjoid2ViYXV0aG4uZ2V0IiwiY2hhbGxlbmdlIjoibW9Pdm5fbUxzT1o4dHNnYnZNMTM4ZWpJeTZlM2hKZlR6LWpOZTkyUGo5SSIsIm9yaWdpbiI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTE3MyIsImNyb3NzT3JpZ2luIjpmYWxzZX0",
+              "authenticatorData": "SZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2MFAAAAAw",
+              "signature": "MEUCICV5uk-6Mxb3WQK_-pgGjjoNM67OSvpcbFyixjczb_ugAiEAxDEZ95_pdDIorRgMx5cZGCiNwfmSdfe5E9hx1YMZv2g"
+            },
+            "clientExtensionResults": {}
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "verified": true,
+          "session": {
+            "type": "server-side",
+            "expiresAt": 1792986560662
+          },
+          "next": "/private"
+        },
+        "setCookie": "[REDACTED]"
+      }
+    },
+    {
+      "case": "concurrent delete A",
+      "request": {
+        "method": "POST",
+        "path": "/api/passkeys/delete",
+        "Cookie": "[REDACTED]",
+        "body": {
+          "credentialId": "mpuSLEPr4Aao0UQ4TvXzjnxKW-Ubpn44-p3adR1WYuk",
+          "confirmName": "시험 기본 열쇠 A"
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "deleted": true,
+          "name": "시험 기본 열쇠 A",
+          "message": "이 키의 서버 공개키를 삭제하고 해당 세션을 폐기했습니다. 기기 관리자에 남은 키는 자동으로 지워지지 않지만 이 사이트에는 로그인할 수 없습니다."
+        }
+      }
+    },
+    {
+      "case": "concurrent delete C",
+      "request": {
+        "method": "POST",
+        "path": "/api/passkeys/delete",
+        "Cookie": "[REDACTED]",
+        "body": {
+          "credentialId": "yDTYPIyWHiumx-PVadb-wObBaj_aL-V5QO84ZMtK4Xw",
+          "confirmName": "동시 삭제 시험 열쇠 C"
+        }
+      },
+      "response": {
+        "status": 403,
+        "body": {
+          "error": "RECENT_PASSKEY_REQUIRED",
+          "message": "키 추가·삭제 전에 패스키로 다시 로그인해 주세요. 로그인 후 10분 동안 변경할 수 있습니다."
+        }
+      }
+    },
+    {
+      "case": "zero keys means no passkey login",
+      "request": {
+        "method": "POST",
+        "path": "/api/passkeys/login/options",
+        "Cookie": "[REDACTED]",
+        "body": {}
+      },
+      "response": {
+        "status": 409,
+        "body": {
+          "error": "NO_PASSKEY",
+          "message": "아직 등록된 패스키가 없습니다. 먼저 소유자 등록 화면에서 등록해 주세요."
+        }
+      }
+    },
+    {
+      "case": "zero keys invalidates private session",
+      "request": {
+        "method": "GET",
+        "path": "/api/private/items",
+        "Cookie": "[REDACTED]"
+      },
+      "response": {
+        "status": 401,
+        "body": {
+          "error": "AUTH_REQUIRED",
+          "message": "패스키 로그인이 필요합니다. 현재는 잠금 상태입니다."
+        }
+      }
+    }
+  ]
+}

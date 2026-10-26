@@ -26,7 +26,7 @@ for (const scenario of ['success', 'cancel', 'expired']) {
     if (path.endsWith('/options')) { calls.push('options'); return Response.json({ attemptId:'fixture-attempt', options:{ challenge:'fixture-challenge' } }); }
     if (path.endsWith('/verify')) { calls.push('verify'); assert.equal(JSON.parse(init.body).credential.id,'fixture-credential'); if (scenario==='expired') return Response.json({message:'사용했거나 취소·만료된 등록 질문입니다. 다시 시작해 주세요.'},{status:409}); keys.push({credential_id:'fixture-credential',name:'시험 열쇠',public_key:'public-fixture',storage_location:'시험',created_at:Date.now()}); return Response.json({verified:true}); }
     if (path.endsWith('/cancel')) { calls.push('cancel'); return Response.json({cancelled:true}); }
-    calls.push('list'); return Response.json({passkeys:keys,attempts:[]});
+    calls.push('list'); return Response.json({passkeys:keys,attempts:[],canManage:true,currentCredentialId:null,events:[]});
   };
   const render=()=>{index=0;return Component();};
   let tree=render(); effects.forEach(effect=>effect()); await new Promise(resolve=>setTimeout(resolve,0));

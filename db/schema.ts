@@ -57,3 +57,12 @@ export const passkeySessions = sqliteTable("passkey_sessions", {
   expiresAt: integer("expires_at").notNull(),
   revokedAt: integer("revoked_at"),
 });
+
+export const passkeyEvents = sqliteTable("passkey_events", {
+  id: text("id").primaryKey(),
+  ownerId: text("owner_id").notNull(),
+  name: text("name").notNull(),
+  action: text("action").notNull(),
+  remainingCount: integer("remaining_count").notNull(),
+  createdAt: integer("created_at").notNull(),
+});

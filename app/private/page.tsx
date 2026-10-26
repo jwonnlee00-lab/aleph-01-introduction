@@ -5,9 +5,10 @@ import PasskeyLogin, { LogoutButton } from "./login";
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
-export default async function PrivateSpace() {
+export default async function PrivateSpace({searchParams}: {searchParams?: Promise<{reauth?:string}>}) {
+  const reauth = (await searchParams)?.reauth === "1";
   const session = await getPrivateSession();
-  const items = session ? await getPrivateItems() : null;
+  const items = session && !reauth ? await getPrivateItems() : null;
   return (
     <main className="private-room">
       <a className="private-link" href="/">← 공개 소개로 돌아가기</a>
@@ -19,6 +20,7 @@ export default async function PrivateSpace() {
         <LogoutButton />
         <section aria-label="나만 보는 가상 자료" className="registration-panel"><ul className="passkey-list">{items.map(item=><li key={item.id}><h2>{item.title}</h2><p>{item.body}</p></li>)}</ul></section>
       </> : <>
+        {reauth&&<p>패스키 키 관리를 위해 기기에서 본인 확인을 다시 진행해 주세요.</p>}
         <p className="private-status">잠김 · 패스키 로그인 필요</p>
         <p>비공개 자료 3개는 서버에서 보관합니다. 로그인 전에는 내용을 내려주지 않습니다.</p>
         <PasskeyLogin />

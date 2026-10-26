@@ -1,0 +1,17 @@
+{
+  "fixtureOnly": true,
+  "checkedAt": "2026-10-26T02:49:20.711Z",
+  "requests": 26,
+  "twoIndependentKeys": true,
+  "namesAndDatesPresent": true,
+  "existingKeyExcluded": true,
+  "backupLoginBeforeDeletion": true,
+  "deletedKeyRejected401": true,
+  "deletedKeySessionRejected401": true,
+  "remainingKeyLogin200": true,
+  "lastKeyDeletion409": true,
+  "concurrentDeletionKeepsOne": true,
+  "managementNeedsRecentPasskey": true,
+  "zeroKeyLogin409": true,
+  "maskedCookies": true
+}

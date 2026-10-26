@@ -75,13 +75,13 @@ export async function verifyLogin(request: Request) {
   return json({ verified: true, session: { type: "server-side", expiresAt }, next: "/private" }, 200, { "Set-Cookie": cookie(cookieName("session", local), token, local, 3600) });
 }
 
-export type PrivateSession = { owner_id: string; credential_id: string; expires_at: number; session_hash: string };
+export type PrivateSession = { owner_id: string; credential_id: string; created_at: number; expires_at: number; session_hash: string };
 export async function getPrivateSession(request?: Request): Promise<PrivateSession | null> {
   const incoming = request ? request.headers : await headers();
   const local = request ? localOrigin(originFor(request)) : /^(localhost|127\.0\.0\.1):\d+$/.test(incoming.get("host") ?? "");
   const token = cookieValue(incoming.get("cookie"), cookieName("session", local));
   if (!token || !/^[A-Za-z0-9_-]{43}$/.test(token)) return null;
-  return db().prepare("SELECT s.owner_id, s.credential_id, s.expires_at, s.session_hash FROM passkey_sessions s JOIN passkeys p ON p.credential_id = s.credential_id AND p.owner_id = s.owner_id WHERE s.session_hash = ? AND s.revoked_at IS NULL AND s.expires_at > ?").bind(await hash(token), Date.now()).first<PrivateSession>();
+  return db().prepare("SELECT s.owner_id, s.credential_id, s.created_at, s.expires_at, s.session_hash FROM passkey_sessions s JOIN passkeys p ON p.credential_id = s.credential_id AND p.owner_id = s.owner_id WHERE s.session_hash = ? AND s.revoked_at IS NULL AND s.expires_at > ?").bind(await hash(token), Date.now()).first<PrivateSession>();
 }
 export async function logout(request: Request) {
   await body(request); const origin = mutationOrigin(request); const session = await getPrivateSession(request);

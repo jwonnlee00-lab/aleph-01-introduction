@@ -91,6 +91,7 @@ type Attempt = { id: string; challenge: string; name: string; storage_location: 
 export async function registrationOptions(request: Request) {
   const input = await body(request);
   const owner = await ownerIdentity(); const origin = mutationOrigin(request);
+  await requireManagementSession(owner, request, true);
   const parsed = metadata.safeParse(input);
   if (!parsed.success) fail("INVALID_NAME_OR_LOCATION", "이름(1~40자)과 실제로 선택할 저장 위치를 입력해 주세요.");
   const binding = await browserBinding(request, true); const now = Date.now(); const database = db();
@@ -101,7 +102,8 @@ export async function registrationOptions(request: Request) {
   const options = await generateRegistrationOptions({
     rpName: "정원의 나만의 자리", rpID: new URL(origin).hostname, userName: "site-owner", userDisplayName: "사이트 소유자",
     userID: new TextEncoder().encode(await hash(owner)), attestationType: "none", supportedAlgorithmIDs: [-7, -257], timeout: 120000,
-    excludeCredentials: existing.results.map(row => ({ id: row.credential_id })),
+    excludeCredentials: existing.results.map(row => ({ id: row.credential_id, transports: JSON.parse(row.transports) })),
+    preferredAuthenticatorType: parsed.data.storageLocation === "기기 자체" ? "localDevice" : undefined,
     authenticatorSelection: { residentKey: "required", userVerification: "required" },
   });
   const attemptId = base64url(crypto.getRandomValues(new Uint8Array(32))); const expiresAt = now + 300000;
@@ -115,6 +117,7 @@ export async function registrationOptions(request: Request) {
 export async function verifyRegistration(request: Request) {
   const input = await body(request);
   const owner = await ownerIdentity(); const origin = mutationOrigin(request); const binding = await browserBinding(request);
+  await requireManagementSession(owner, request, true);
   const parsed = z.object({ attemptId: idSchema, credential: credentialSchema }).strict().safeParse(input);
   if (!parsed.success) fail("INVALID_BODY", "등록 응답 형식이 올바르지 않습니다.");
   const database = db(); const now = Date.now();
@@ -163,7 +166,40 @@ export async function registrationEvidence() {
   const keys = await database.prepare("SELECT credential_id, name, public_key, counter, transports, device_type, backed_up, storage_location, created_at FROM passkeys WHERE owner_id = ? ORDER BY created_at DESC").bind(owner).all();
   // Active challenges and cookie binding material never enter exported evidence.
   const attempts = await database.prepare("SELECT id, challenge, name, storage_location, state, created_at, expires_at, request_json, credential_id, failure_code FROM passkey_registration_attempts WHERE owner_id = ? AND state NOT IN ('pending', 'verifying') ORDER BY created_at DESC LIMIT 30").bind(owner).all();
-  return json({ generatedAt: new Date().toISOString(), publicKeyFormat: "COSE_Key / base64url", storageLocationSource: "등록자가 선택한 위치. 실제 기기 저장 위치는 직접 확인 필요", passkeys: keys.results, attempts: attempts.results, privateKeyStored: false });
+  const { getPrivateSession } = await import("./passkey-login");
+  const session = await getPrivateSession();
+  const canManage = keys.results.length === 0 || !!(session && session.owner_id === owner && session.created_at > Date.now() - 600000);
+  const events = await database.prepare("SELECT name, action, remaining_count, created_at FROM passkey_events WHERE owner_id = ? ORDER BY created_at DESC LIMIT 30").bind(owner).all();
+  return json({ generatedAt: new Date().toISOString(), publicKeyFormat: "COSE_Key / base64url", storageLocationSource: "등록자가 선택한 위치. 실제 기기 저장 위치는 직접 확인 필요", passkeys: keys.results, attempts: attempts.results, events: events.results, canManage, currentCredentialId: session?.owner_id === owner ? session.credential_id : null, privateKeyStored: false });
+}
+
+export async function requireManagementSession(owner: string, request: Request, allowFirst = false) {
+  if (allowFirst) {
+    const count = await db().prepare("SELECT COUNT(*) AS count FROM passkeys WHERE owner_id = ?").bind(owner).first<{count:number}>();
+    if (!count?.count) return;
+  }
+  const { getPrivateSession } = await import("./passkey-login");
+  const session = await getPrivateSession(request);
+  if (!session || session.owner_id !== owner || session.created_at <= Date.now() - 600000) fail("RECENT_PASSKEY_REQUIRED", "키 추가·삭제 전에 패스키로 다시 로그인해 주세요. 로그인 후 10분 동안 변경할 수 있습니다.", 403);
+}
+
+export async function deletePasskey(request: Request) {
+  const input = await body(request); const owner = await ownerIdentity(); mutationOrigin(request);
+  await requireManagementSession(owner, request);
+  const parsed = z.object({ credentialId: z.string().min(1).max(2048), confirmName: z.string().min(1).max(40) }).strict().safeParse(input);
+  if (!parsed.success) fail("INVALID_BODY", "삭제할 패스키와 확인한 이름이 필요합니다.");
+  const database = db(); const key = await database.prepare("SELECT name FROM passkeys WHERE credential_id = ? AND owner_id = ?").bind(parsed.data.credentialId, owner).first<{name:string}>();
+  if (!key) fail("PASSKEY_NOT_FOUND", "이미 삭제되었거나 소유자의 패스키가 아닙니다.", 404);
+  if (key.name !== parsed.data.confirmName) fail("CONFIRMATION_MISMATCH", "삭제할 패스키 이름을 다시 확인해 주세요.", 409);
+  const eventId = base64url(crypto.getRandomValues(new Uint8Array(32))); const now = Date.now();
+  const result = await database.batch([
+    // Atomic count guard also protects against concurrent deletion of the last two keys.
+    database.prepare("DELETE FROM passkeys WHERE credential_id = ? AND owner_id = ? AND (SELECT COUNT(*) FROM passkeys WHERE owner_id = ?) > 1 RETURNING credential_id").bind(parsed.data.credentialId, owner, owner),
+    database.prepare("INSERT INTO passkey_events (id, owner_id, name, action, remaining_count, created_at) SELECT ?, ?, ?, 'deleted', (SELECT COUNT(*) FROM passkeys WHERE owner_id = ?), ? WHERE changes() = 1").bind(eventId, owner, key.name, owner, now),
+    database.prepare("UPDATE passkey_sessions SET revoked_at = ? WHERE credential_id = ? AND owner_id = ? AND revoked_at IS NULL AND EXISTS (SELECT 1 FROM passkey_events WHERE id = ?)").bind(now, parsed.data.credentialId, owner, eventId),
+  ]);
+  if (!result[0].results.length) fail("LAST_PASSKEY", "마지막 패스키는 삭제할 수 없습니다. 먼저 다른 저장 위치에 두 번째 패스키를 등록해 주세요.", 409);
+  return json({ deleted: true, name: key.name, message: "이 키의 서버 공개키를 삭제하고 해당 세션을 폐기했습니다. 기기 관리자에 남은 키는 자동으로 지워지지 않지만 이 사이트에는 로그인할 수 없습니다." });
 }
 
 export async function registrationRoute(action: () => Promise<Response>) {
