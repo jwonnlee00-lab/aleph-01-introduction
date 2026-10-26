@@ -1,0 +1,40 @@
+{
+  "fixtureOnly": true,
+  "actualDeviceNotUsed": true,
+  "results": [
+    {
+      "scenario": "success",
+      "passed": true,
+      "operations": [
+        "list",
+        "options",
+        "device",
+        "verify",
+        "list"
+      ]
+    },
+    {
+      "scenario": "cancel",
+      "passed": true,
+      "operations": [
+        "list",
+        "options",
+        "device",
+        "cancel",
+        "list"
+      ]
+    },
+    {
+      "scenario": "expired",
+      "passed": true,
+      "operations": [
+        "list",
+        "options",
+        "device",
+        "verify",
+        "list",
+        "list"
+      ]
+    }
+  ]
+}

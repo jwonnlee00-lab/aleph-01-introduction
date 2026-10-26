@@ -163,7 +163,7 @@ export async function registrationEvidence() {
   const keys = await database.prepare("SELECT credential_id, name, public_key, counter, transports, device_type, backed_up, storage_location, created_at FROM passkeys WHERE owner_id = ? ORDER BY created_at DESC").bind(owner).all();
   // Active challenges and cookie binding material never enter exported evidence.
   const attempts = await database.prepare("SELECT id, challenge, name, storage_location, state, created_at, expires_at, request_json, credential_id, failure_code FROM passkey_registration_attempts WHERE owner_id = ? AND state NOT IN ('pending', 'verifying') ORDER BY created_at DESC LIMIT 30").bind(owner).all();
-  return json({ generatedAt: new Date().toISOString(), publicKeyFormat: "COSE_Key / base64url", storageLocationSource: "등록자가 기기 인증창에서 확인한 위치를 직접 선택", passkeys: keys.results, attempts: attempts.results, privateKeyStored: false });
+  return json({ generatedAt: new Date().toISOString(), publicKeyFormat: "COSE_Key / base64url", storageLocationSource: "등록자가 선택한 위치. 실제 기기 저장 위치는 직접 확인 필요", passkeys: keys.results, attempts: attempts.results, privateKeyStored: false });
 }
 
 export async function registrationRoute(action: () => Promise<Response>) {
