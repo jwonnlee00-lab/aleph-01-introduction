@@ -1,0 +1,19 @@
+{
+  "cookiesIncluded": false,
+  "records": [
+    {
+      "path": "/api/passkeys/delete",
+      "method": "POST",
+      "status": 401,
+      "body": {
+        "error": "OWNER_SIGN_IN_REQUIRED",
+        "message": "등록하려면 먼저 소유자 계정으로 확인해 주세요."
+      }
+    },
+    {
+      "path": "/private?reauth=1",
+      "status": 200,
+      "loginFormPresent": true
+    }
+  ]
+}
