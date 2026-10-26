@@ -13,8 +13,8 @@ async function api<T = Record<string, unknown>>(path: string, payload?: unknown)
 }
 
 export default function PasskeyRegistration() {
-  const [name, setName] = useState("Windows Hello · 예비 열쇠");
-  const [storageLocation, setStorageLocation] = useState("기기 자체");
+  const [name, setName] = useState("아이폰 iCloud · 예비 열쇠");
+  const [storageLocation, setStorageLocation] = useState("아이폰 · iCloud 키체인");
   const [supported, setSupported] = useState<boolean | null>(null);
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
@@ -99,10 +99,10 @@ export default function PasskeyRegistration() {
       {evidence && !evidence.canManage && <div className="registration-confirm"><p>키를 추가·삭제하려면 최근 10분 안에 패스키로 로그인해야 합니다.</p><a className="private-link" href="/private?reauth=1">패스키로 다시 확인하기 →</a><p className="registration-hint">로그인 후 이 목록으로 돌아와 ‘목록 새로고침’을 눌러 주세요.</p></div>}
       <label className="registration-field">패스키 이름<input maxLength={40} value={name} onChange={e => setName(e.target.value)} disabled={busy} autoComplete="off" /></label>
       <label className="registration-field">저장할 위치<select value={storageLocation} onChange={e => { setStorageLocation(e.target.value); setConfirmation(false); }} disabled={busy}>
-        <option>구글 비밀번호 관리자</option><option>기기 자체</option><option>보안 키</option>
+        <option>아이폰 · iCloud 키체인</option><option>구글 비밀번호 관리자</option><option>기기 자체</option><option>보안 키</option>
       </select></label>
       <p className="registration-hint">등록창에서도 같은 위치를 선택하세요. 저장 업체 이름은 브라우저 응답만으로 확인할 수 없어 직접 확인해 기록합니다. 구글 관리자가 안 보이면 해당 관리자를 사용하는 Chrome이나 휴대전화에서 같은 주소로 진행하세요.</p>
-      <p className="registration-hint">예비 키는 기기 자체를 선택하고 인증창에서 Windows Hello에 저장하세요. 구글 키가 다른 기기에 동기화되어 보이는 것은 별도의 두 번째 키가 아닙니다.</p>
+      <p className="registration-hint">아이폰 예비 키는 ‘아이폰 · iCloud 키체인’을 선택하세요. PC와 아이폰의 Bluetooth를 켜고, 인증창의 휴대전화 옵션에서 QR 코드를 아이폰으로 스캔한 뒤 Apple 암호/iCloud 키체인에 저장하세요. Windows Hello는 ‘기기 자체’를 선택합니다. 구글 키가 다른 기기에 동기화되어 보이는 것은 별도의 두 번째 키가 아닙니다.</p>
       {supported === false && <p role="alert">이 브라우저에서 패스키를 사용할 수 없습니다. HTTPS 주소를 패스키 지원 브라우저에서 열어 주세요.</p>}
       <div className="registration-confirm">
         <label><input type="checkbox" checked={confirmation} onChange={e => setConfirmation(e.target.checked)} disabled={busy} /> 기기 인증창에서도 ‘{storageLocation}’를 선택해 저장하겠습니다.</label>

@@ -6,7 +6,7 @@ import { getChatGPTUser } from "@/app/chatgpt-auth";
 
 export const productionOrigin = "https://jungwon-intro.jwonnlee00.chatgpt.site";
 const noCache = { "Cache-Control": "no-store, private", Vary: "Cookie" };
-export const storageLocations = ["기기 자체", "구글 비밀번호 관리자", "보안 키"] as const;
+export const storageLocations = ["기기 자체", "구글 비밀번호 관리자", "보안 키", "아이폰 · iCloud 키체인"] as const;
 const metadata = z.object({ name: z.string().trim().min(1).max(40), storageLocation: z.enum(storageLocations) }).strict();
 const idSchema = z.string().regex(/^[A-Za-z0-9_-]{32,128}$/);
 const credentialSchema = z.object({
@@ -103,7 +103,7 @@ export async function registrationOptions(request: Request) {
     rpName: "정원의 나만의 자리", rpID: new URL(origin).hostname, userName: "site-owner", userDisplayName: "사이트 소유자",
     userID: new TextEncoder().encode(await hash(owner)), attestationType: "none", supportedAlgorithmIDs: [-7, -257], timeout: 120000,
     excludeCredentials: existing.results.map(row => ({ id: row.credential_id, transports: JSON.parse(row.transports) })),
-    preferredAuthenticatorType: parsed.data.storageLocation === "기기 자체" ? "localDevice" : undefined,
+    preferredAuthenticatorType: parsed.data.storageLocation === "아이폰 · iCloud 키체인" ? "remoteDevice" : parsed.data.storageLocation === "기기 자체" ? "localDevice" : undefined,
     authenticatorSelection: { residentKey: "required", userVerification: "required" },
   });
   const attemptId = base64url(crypto.getRandomValues(new Uint8Array(32))); const expiresAt = now + 300000;
