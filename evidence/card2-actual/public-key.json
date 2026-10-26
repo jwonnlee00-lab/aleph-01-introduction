@@ -1,0 +1,41 @@
+{
+  "actualDeviceRegistration": true,
+  "verified": true,
+  "passkeyName": "구글 관리자 · 기본 열쇠",
+  "selectedStorageLocation": "구글 비밀번호 관리자",
+  "storageLocationSource": "등록자 선택 및 사용자 등록 완료 보고",
+  "publicKey": "pQECAyYgASFYIL5509QQq5MVw5fJRqIDxnUmcBTUazSOdyL13J8HfiQwIlggI7xyoVakHp7WizPaNkWo9aRNabVyb63nQjwMPW5xGpU",
+  "publicKeyFormat": "COSE_Key / base64url",
+  "decodedPublicKey": {
+    "keyType": "EC2",
+    "algorithm": "ES256",
+    "curve": "P-256",
+    "hasPublicCoordinates": true,
+    "hasPrivateComponent": false
+  },
+  "requestFieldNames": {
+    "root": [
+      "attemptId",
+      "credential"
+    ],
+    "credential": [
+      "id",
+      "rawId",
+      "type",
+      "response",
+      "authenticatorAttachment",
+      "clientExtensionResults"
+    ],
+    "response": [
+      "clientDataJSON",
+      "attestationObject",
+      "transports",
+      "publicKeyAlgorithm",
+      "publicKey",
+      "authenticatorData"
+    ]
+  },
+  "privateKeyFieldAbsent": true,
+  "passwordFieldAbsent": true,
+  "rawRequestPublished": false
+}
