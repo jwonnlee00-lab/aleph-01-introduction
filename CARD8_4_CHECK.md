@@ -76,6 +76,6 @@
 
 동기화와 저장 위치의 차이는 [Google의 패스키 지원 환경 안내](https://developers.google.com/identity/passkeys/supported-environments), 중복 등록 제외는 [SimpleWebAuthn 서버 문서](https://simplewebauthn.dev/docs/packages/server)를 참고했습니다.
 
-## 배포確認
+## 배포 확인
 
 2026-10-26 배포 주소에서 익명 삭제 요청은 401로 거절됐고, /private?reauth=1은 패스키 로그인 화면을 반환했습니다. 실제 사용자 키를 자동으로 삭제하지 않았습니다. 실제 두 키 목록과 삭제 대상 선택, 남은 키 로그인은 사용자 기기에서 진행 중입니다.
