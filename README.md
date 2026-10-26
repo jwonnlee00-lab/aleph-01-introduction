@@ -1,33 +1,54 @@
-# 패스키 과제 · 카드 1
+# 정원의 소개 · 패스키 과제
 
-공개 소개 아래에 ‘나만의 자리’를 추가했습니다. 공개 소개는 누구나 볼 수 있고, 개인 공간에는 잠금 안내만 나옵니다. 가상 자료 세 항목은 서버 전용 모듈에 두었습니다. 자료 API는 로그인 없이 요청하면 401로 거절합니다.
+공개 소개와 취향은 누구나 읽을 수 있습니다. 소개 아래의 ‘나만의 자리’에는 가상 자료 세 항목을 두고 서버에서 접근을 막았습니다. 카드 2에서는 소유자가 패스키를 등록하고 공개키와 이름을 서버에 저장할 수 있습니다. 패스키 로그인은 다음 카드에서 구현하므로 현재 비공개 자료 요청은 모두 401입니다.
 
 - 결과물: https://jungwon-intro.jwonnlee00.chatgpt.site
-- 공개 화면: `app/page.tsx`
-- 잠금 안내: `app/private/page.tsx`
-- 비공개 조회: `app/api/private/items/route.ts`
-- 접근 검사: `lib/private-access.ts`
-- 가상 자료: `lib/private-items.server.ts`
-- 설명과 확인 방법: [CARD8_1_CHECK.md](CARD8_1_CHECK.md)
-- 배포 응답 증거: [evidence/card1-production](evidence/card1-production)
-
-등록·로그인·로그아웃은 다음 카드에서 구현합니다. 현재는 비공개 자료 조회를 모두 거절합니다. 공개 GitHub에 들어 있는 연습 자료는 실제 비밀이 아닙니다. 이번 카드가 확인하는 경계는 웹사이트의 비로그인 응답입니다.
+- 패스키 등록: https://jungwon-intro.jwonnlee00.chatgpt.site/private/passkeys
+- 카드 1 설명: [CARD8_1_CHECK.md](CARD8_1_CHECK.md)
+- 카드 2 구현 설명과 검증: [CARD8_2_CHECK.md](CARD8_2_CHECK.md)
 
 ## 실행 방법
 
-Node.js 22.13 이상, pnpm 11.25.0에서 실행합니다.
+Node.js 22.13 이상과 pnpm 11.25.0을 사용합니다.
 
 ```sh
 pnpm run install:ci
+pnpm run db:generate
 pnpm run build
+```
+
+처음 로컬 DB를 만들 때 생성된 SQL을 한 번 적용합니다.
+
+```sh
+node --import ./scripts/sites-env.mjs ./node_modules/wrangler/bin/wrangler.js d1 execute DB --local --config dist/server/wrangler.json --persist-to .wrangler/state --file drizzle/0000_hard_komodo.sql
 pnpm run start
 node scripts/check-card1.mjs http://127.0.0.1:8787
 ```
 
-배포 주소로 검사하려면 마지막 명령에 `https://jungwon-intro.jwonnlee00.chatgpt.site`를 전달합니다. 검사 과정에서 쿠키 없는 공개·잠금 페이지, 비로그인 API, 가짜 쿠키 API 요청을 보냅니다. 서버 응답 본문과 상태 코드를 파일로 보관하며, 비공개 본문이 HTML과 연결된 클라이언트 스크립트에 포함되지 않았는지 확인합니다.
+이미 적용한 마이그레이션은 다시 실행하지 않습니다. 실제 배포용 소유자 정보는 Sites 런타임의 PASSKEY_OWNER_EMAIL에 비밀 설정으로 보관합니다. 로컬 시험은 실제 계정 대신 owner@example.test 가상 계정을 씁니다. 실제 소유자 값이나 쿠키는 소스에 넣지 않습니다.
+
+## 주요 파일
+
+| 파일 | 동작 |
+| --- | --- |
+| app/page.tsx | 공개 소개와 잠긴 개인 공간의 경계를 표시합니다. |
+| app/private/page.tsx | 잠금 안내와 패스키 등록 입구입니다. |
+| app/private/passkeys/ | 소유자 확인, 기기 등록과 이름·공개키 목록을 보여 줍니다. |
+| app/api/passkeys/register/ | 등록 질문 생성, 응답 검증, 취소 요청을 받습니다. |
+| lib/passkey-registration.ts | 질문 보관과 검증, 공개키 저장을 처리합니다. |
+| app/api/passkeys/route.ts | 소유자에게만 목록과 등록 증거를 반환합니다. |
+| app/api/private/items/route.ts | 비공개 자료 조회 경로입니다. 현재 401을 반환합니다. |
+| lib/private-access.ts | 패스키 로그인 구현 전까지 모든 자료 접근을 거절합니다. |
+| db/schema.ts | 공개키와 등록 시도 기록의 컬럼을 정의합니다. |
 
 ## 검증 결과
 
-2026-10-26 로컬 Worker와 배포 주소에서 같은 네 요청을 확인했습니다. 공개·잠금 페이지는 200, 자료 API와 가짜 쿠키 API는 401이었고 비공개 본문은 없었습니다. 공개 HTML에 연결된 클라이언트 스크립트 세 개에도 비공개 본문이 없었습니다. 빌드와 TypeScript 검사도 통과했습니다.
+빌드와 TypeScript 검사를 통과했습니다. 로컬 소프트웨어 시험에서는 등록 질문의 차이, 공개키 저장, 취소 시 공개키 미저장, 질문 재사용·만료·잘못된 출처·다른 계정 거절을 24개 요청으로 확인했습니다. 소프트웨어 시험은 실제 구글 관리자 등록이 아닙니다. 실제 등록과 기기 인증창 취소는 사용자 기기에서 확인해야 합니다.
 
-`index.html`과 `style.css`는 이전 정적 소개 페이지입니다. 현재 배포 소스는 `app/`이며, 기존 파일은 이전 과제 기록으로 남겼습니다.
+- [카드 1 배포 응답](evidence/card1-production)
+- [카드 2 로컬 요청·응답과 시험용 공개키](evidence/card2-local)
+- [카드 2 배포 API의 익명 접근 거절](evidence/card2-production)
+
+등록은 USB 보안 키 외에도 구글 비밀번호 관리자와 기기 자체 저장을 사용할 수 있습니다. 구글 관리자를 이용하려면 일반 Chrome이나 지원되는 Android 기기에서 등록하고 실제 저장 위치를 확인합니다.
+
+index.html과 style.css는 이전 정적 소개 페이지입니다. 현재 배포 코드는 app/입니다. 등록·로그아웃·자료 조회 중 아직 없는 로그인·로그아웃 기능은 구현 완료로 표시하지 않았습니다.

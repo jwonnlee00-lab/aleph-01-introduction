@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/private/items"
+  },
+  "response": {
+    "status": 401,
+    "headers": {
+      "cache-control": "no-store, private",
+      "cf-ray": "a505b185cd1e5b64-ICN",
+      "connection": "keep-alive",
+      "content-type": "application/json; charset=utf-8",
+      "date": "Mon, 26 Oct 2026 01:30:02 GMT",
+      "server": "cloudflare",
+      "transfer-encoding": "chunked",
+      "vary": "Cookie, RSC, Next-Router-State-Tree, Next-Router-Prefetch, Next-Router-Segment-Prefetch, Next-Url, X-Vinext-Interception-Context, X-Vinext-Mounted-Slots, X-Vinext-Rsc-Render-Mode"
+    },
+    "body": {
+      "error": "AUTH_REQUIRED",
+      "message": "패스키 로그인이 필요합니다. 현재는 잠금 상태입니다."
+    }
+  }
+}

@@ -95,7 +95,7 @@ export default function Home() {
           <h2 id="private-title">나만의 자리</h2>
           <p>위의 소개와 취향은 누구나 볼 수 있습니다. 이 아래는 패스키로 들어갈 개인 공간입니다.</p>
           <p className="private-status">잠김 · 비공개 자료 3개</p>
-          <p>지금은 공간을 구분하는 단계입니다. 패스키 등록과 로그인은 다음 카드에서 연결합니다.</p>
+          <p>패스키 등록은 ‘잠금 상태 확인하기’에서 진행합니다. 로그인은 다음 카드에서 연결합니다.</p>
           <a className="private-link" href="/private">잠금 상태 확인하기 <span aria-hidden="true">→</span></a>
         </div>
         <aside aria-label="비공개 자료 안내">내용은 로그인 전에 내려받지 않습니다.<br />연습용 가상 자료만 사용합니다.</aside>

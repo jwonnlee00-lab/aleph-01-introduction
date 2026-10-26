@@ -1,0 +1,20 @@
+{
+  "fixtureOnly": true,
+  "checkedAt": "2026-10-26T01:24:39.886Z",
+  "requestCount": 24,
+  "uniqueChallenges": [
+    "yP5w_QoaqH8AsI5K72V42xke-unG6hep1QL21WyZIUE",
+    "XvWH_-_Sv5S1k7ZU2ycvaXNTjuibRq7uYu4E04tZIwY"
+  ],
+  "challengeDifferent": true,
+  "cancellationSavedNoPublicKey": true,
+  "replayRejected": true,
+  "wrongChallengeRejected": true,
+  "wrongOriginRejected": true,
+  "expiredChallengeRejected": true,
+  "unboundBrowserRejected": true,
+  "privateKeyFieldRejected": true,
+  "storedKeyMatchesVerifiedPublicKey": true,
+  "privateDataStill401": true,
+  "actualGooglePasswordManagerRegistration": "not-tested"
+}

@@ -1,0 +1,21 @@
+{
+  "fixtureOnly": true,
+  "stored": {
+    "credential_id": "Dq0XaeOodsj0d2BLNmYHLbwmNDIBOiB2O4urscpiJ2k",
+    "name": "로컬 소프트웨어 시험 열쇠",
+    "public_key": "pQECAyYgASFYIFVHyHxcRuam1_7lYVZSwwGaetdxMKbWvciFqIMmvbGBIlggyKsC4wQXchwAucQL045f9q-GYYB8GfHbIe9DVx7Wd7E",
+    "counter": 0,
+    "transports": "[\"internal\"]",
+    "device_type": "singleDevice",
+    "backed_up": 0,
+    "storage_location": "기기 자체",
+    "created_at": 1792977878788
+  },
+  "decodedKey": {
+    "type": "EC2",
+    "algorithm": "ES256",
+    "curve": "P-256",
+    "x": "VUfIfFxG5qbX_uVhVlLDAZp613Ewpta9yIWogya9sYE",
+    "y": "yKsC4wQXchwAucQL045f9q-GYYB8GfHbIe9DVx7Wd7E"
+  }
+}

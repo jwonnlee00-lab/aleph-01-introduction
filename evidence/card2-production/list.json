@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/passkeys"
+  },
+  "response": {
+    "status": 401,
+    "headers": {
+      "cache-control": "no-store, private",
+      "cf-ray": "a505b1842f615b64-ICN",
+      "connection": "keep-alive",
+      "content-type": "application/json",
+      "date": "Mon, 26 Oct 2026 01:30:02 GMT",
+      "server": "cloudflare",
+      "transfer-encoding": "chunked",
+      "vary": "Cookie, RSC, Next-Router-State-Tree, Next-Router-Prefetch, Next-Router-Segment-Prefetch, Next-Url, X-Vinext-Interception-Context, X-Vinext-Mounted-Slots, X-Vinext-Rsc-Render-Mode"
+    },
+    "body": {
+      "error": "OWNER_SIGN_IN_REQUIRED",
+      "message": "등록하려면 먼저 소유자 계정으로 확인해 주세요."
+    }
+  }
+}

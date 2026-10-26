@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/private/items",
+    "headers": {}
+  },
+  "status": 401,
+  "headers": {
+    "cache-control": "no-store, private",
+    "content-encoding": "gzip",
+    "content-type": "application/json; charset=utf-8",
+    "transfer-encoding": "chunked",
+    "vary": "Cookie, RSC, Next-Router-State-Tree, Next-Router-Prefetch, Next-Router-Segment-Prefetch, Next-Url, X-Vinext-Interception-Context, X-Vinext-Mounted-Slots, X-Vinext-Rsc-Render-Mode"
+  },
+  "containsPrivateContent": false
+}

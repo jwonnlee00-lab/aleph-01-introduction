@@ -9,6 +9,25 @@
 .private-boundary aside { border-left:1px solid var(--line); padding-left:24px; align-self:center; line-height:1.8; color:var(--muted); }
 .private-room { width:min(780px,calc(100% - 48px)); margin:64px auto; }
 .private-room .eyebrow { margin-top:36px; }
+.registration-room { width:min(900px,calc(100% - 48px)); }
+.registration-room h1 { font-size:clamp(2rem,5vw,3.4rem); }
+.registration-panel { background:var(--card); border:1px solid var(--line); padding:28px; margin:28px 0; border-radius:8px; }
+.registration-panel h2 { font-size:1.5rem; margin-bottom:20px; }
+.registration-field { display:grid; gap:8px; margin:18px 0; font-weight:700; }
+.registration-field input,.registration-field select { width:100%; padding:12px; font:inherit; border:1px solid var(--line); border-radius:4px; background:white; color:var(--ink); }
+.registration-button,.registration-secondary { display:inline-block; font:inherit; font-weight:700; padding:12px 16px; border-radius:4px; cursor:pointer; margin:8px 8px 8px 0; }
+.registration-button { color:white; background:var(--accent); border:1px solid var(--accent); }
+.registration-secondary { background:transparent; border:1px solid var(--line); color:var(--ink); }
+.registration-button:disabled,.registration-secondary:disabled { opacity:.5; cursor:default; }
+.registration-panel button:focus-visible,.registration-panel input:focus-visible,.registration-panel select:focus-visible { outline:3px solid var(--accent); outline-offset:3px; }
+.registration-hint { color:var(--muted); font-size:.86rem; }
+.registration-message { font-weight:700; overflow-wrap:anywhere; }
+.registration-count { color:var(--accent); }
+.registration-confirm { padding:18px; border:2px solid var(--accent); margin-top:18px; }
+.passkey-list { padding:0; list-style:none; }
+.passkey-list li { padding:20px 0; border-bottom:1px solid var(--line); }
+.passkey-list h3 { max-width:100%; overflow-wrap:anywhere; }
+.passkey-list pre { white-space:pre-wrap; overflow-wrap:anywhere; padding:16px; background:var(--paper); font-size:.8rem; }
 @media(max-width:760px) { .private-boundary { grid-template-columns:1fr; padding:24px; } .private-boundary aside { border-left:0; border-top:1px solid var(--line); padding:20px 0 0; } nav { gap:12px; font-size:.75rem; } }
 
 :root { --ink:#151619; --paper:#f3f1eb; --card:#fbfaf7; --line:#c9c6bd; --muted:#64635f; --accent:#b5213b; --accent-on-dark:#ff6f86; }
