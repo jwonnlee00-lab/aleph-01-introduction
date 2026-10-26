@@ -1,0 +1,15 @@
+{
+  "requests": [
+    {
+      "path": "/private",
+      "status": 200,
+      "privateContentAbsent": true
+    },
+    {
+      "path": "/api/private/items",
+      "status": 401,
+      "privateContentAbsent": true
+    }
+  ],
+  "cookiesIncluded": false
+}

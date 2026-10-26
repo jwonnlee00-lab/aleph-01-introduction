@@ -36,3 +36,24 @@ export const ownerIdentityChecks = sqliteTable("owner_identity_checks", {
   createdAt: integer("created_at").notNull(),
   expiresAt: integer("expires_at").notNull(),
 });
+
+export const loginAttempts = sqliteTable("passkey_login_attempts", {
+  id: text("id").primaryKey(),
+  challenge: text("challenge").notNull(),
+  browserHash: text("browser_hash").notNull(),
+  rateKey: text("rate_key").notNull(),
+  state: text("state").notNull(),
+  createdAt: integer("created_at").notNull(),
+  expiresAt: integer("expires_at").notNull(),
+  ownerId: text("owner_id"),
+  resultCode: text("result_code"),
+});
+
+export const passkeySessions = sqliteTable("passkey_sessions", {
+  sessionHash: text("session_hash").primaryKey(),
+  ownerId: text("owner_id").notNull(),
+  credentialId: text("credential_id").notNull(),
+  createdAt: integer("created_at").notNull(),
+  expiresAt: integer("expires_at").notNull(),
+  revokedAt: integer("revoked_at"),
+});

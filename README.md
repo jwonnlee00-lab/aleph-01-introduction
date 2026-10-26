@@ -1,8 +1,10 @@
 # 정원의 소개 · 패스키 과제
 
-공개 소개와 취향은 누구나 읽을 수 있습니다. 소개 아래의 ‘나만의 자리’에는 가상 자료 세 항목을 두고 서버에서 접근을 막았습니다. 카드 2에서는 소유자가 패스키를 등록하고 공개키와 이름을 서버에 저장할 수 있습니다. 패스키 로그인은 다음 카드에서 구현하므로 현재 비공개 자료 요청은 모두 401입니다.
+공개 소개와 취향은 누구나 읽을 수 있습니다. 소개 아래의 ‘나만의 자리’에는 가상 자료 세 항목을 두고 서버에서 접근을 막았습니다. 카드 2에서는 소유자가 패스키를 등록하고 공개키와 이름을 서버에 저장할 수 있습니다. 카드 3에서는 패스키 서명을 확인한 뒤 서버 세션을 발급합니다. 로그인한 세션만 가상 자료 세 항목을 조회할 수 있고, 로그아웃하면 같은 쿠키를 다시 보내도 401로 거절됩니다.
 
 - 결과물: https://jungwon-intro.jwonnlee00.chatgpt.site
+- 패스키 로그인: https://jungwon-intro.jwonnlee00.chatgpt.site/private
+- 카드 3 구현 설명과 검증: [CARD8_3_CHECK.md](CARD8_3_CHECK.md)
 - 패스키 등록: https://jungwon-intro.jwonnlee00.chatgpt.site/private/passkeys
 - 카드 1 설명: [CARD8_1_CHECK.md](CARD8_1_CHECK.md)
 - 카드 2 구현 설명과 검증: [CARD8_2_CHECK.md](CARD8_2_CHECK.md)
@@ -37,8 +39,8 @@ node scripts/check-card1.mjs http://127.0.0.1:8787
 | app/api/passkeys/register/ | 등록 질문 생성, 응답 검증, 취소 요청을 받습니다. |
 | lib/passkey-registration.ts | 질문 보관과 검증, 공개키 저장을 처리합니다. |
 | app/api/passkeys/route.ts | 소유자에게만 목록과 등록 증거를 반환합니다. |
-| app/api/private/items/route.ts | 비공개 자료 조회 경로입니다. 현재 401을 반환합니다. |
-| lib/private-access.ts | 패스키 로그인 구현 전까지 모든 자료 접근을 거절합니다. |
+| app/api/private/items/route.ts | 비공개 자료 조회 경로입니다. 세션이 없거나 폐기·만료되면 401을 반환합니다. |
+| lib/private-access.ts | 패스키로 검증된 서버 세션만 자료 조회를 허용합니다. |
 | db/schema.ts | 공개키와 등록 시도 기록의 컬럼을 정의합니다. |
 
 ## 검증 결과
@@ -51,4 +53,4 @@ node scripts/check-card1.mjs http://127.0.0.1:8787
 
 등록은 USB 보안 키 외에도 구글 비밀번호 관리자와 기기 자체 저장을 사용할 수 있습니다. 구글 관리자를 이용하려면 일반 Chrome이나 지원되는 Android 기기에서 등록하고 실제 저장 위치를 확인합니다.
 
-index.html과 style.css는 이전 정적 소개 페이지입니다. 현재 배포 코드는 app/입니다. 등록·로그아웃·자료 조회 중 아직 없는 로그인·로그아웃 기능은 구현 완료로 표시하지 않았습니다.
+index.html과 style.css는 이전 정적 소개 페이지입니다. 현재 배포 코드는 app/입니다. 로그인·로그아웃·자료 조회는 app/api/passkeys/login/, app/api/passkeys/logout/, app/api/private/items/를 통해 처리합니다. 카드 3의 로컬 서명·세션 검사 44건을 통과했습니다. 실제 Chrome에서도 자료 3개 조회와 로그아웃 후 잠금을 사용자가 확인했고, 운영 DB의 로그인 성공·세션 폐기 기록과 대조했습니다.

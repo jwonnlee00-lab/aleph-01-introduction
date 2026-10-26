@@ -22,7 +22,8 @@ export default async function PasskeysPage() {
     <a className="private-link" href="/private">← 나만의 자리</a>
     <p className="eyebrow">PASSKEY · 열쇠 등록</p>
     <h1>비밀번호 대신,<br />내 기기의 열쇠</h1>
-    <p>기기가 열쇠를 만들고 서버에는 공개키만 보냅니다. 비공개 자료는 패스키 로그인을 붙이는 다음 카드까지 잠겨 있습니다.</p>
+    <p>기기가 열쇠를 만들고 서버에는 공개키만 보냅니다. 등록한 뒤 ‘나만의 자리’에서 패스키로 로그인할 수 있습니다.</p>
+    <a className="private-link" href="/private">등록한 패스키로 로그인하러 가기 →</a>
     {allowed ? <PasskeyRegistration /> : <section className="registration-panel">
       <h2>소유자 확인이 필요합니다</h2>
       <p role="alert">{accessMessage}</p>

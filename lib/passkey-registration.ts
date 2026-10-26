@@ -53,19 +53,19 @@ export async function createIdentityCheck(request: Request) {
   await database.prepare("INSERT INTO owner_identity_checks (code, subject_id, created_at, expires_at) VALUES (?, ?, ?, ?)").bind(code, user.userId, now, expiresAt).run();
   return json({ code, expiresAt, grantsAccess: false });
 }
-function db() { if (!env.DB) fail("STORAGE_UNAVAILABLE", "저장소 연결을 확인해 주세요.", 503); return env.DB; }
-function originFor(request: Request) {
+export function db() { if (!env.DB) fail("STORAGE_UNAVAILABLE", "저장소 연결을 확인해 주세요.", 503); return env.DB; }
+export function originFor(request: Request) {
   const origin = new URL(request.url).origin;
   if (origin !== productionOrigin && !/^http:\/\/(localhost|127\.0\.0\.1):\d+$/.test(origin)) fail("WRONG_ORIGIN", "등록 주소가 올바르지 않습니다.", 403);
   return origin;
 }
-function mutationOrigin(request: Request) {
+export function mutationOrigin(request: Request) {
   const origin = originFor(request);
   if (request.headers.get("origin") !== origin) fail("WRONG_ORIGIN", "같은 사이트에서 등록을 시작해 주세요.", 403);
   if (!request.headers.get("content-type")?.startsWith("application/json")) fail("INVALID_BODY", "JSON 요청이 필요합니다.");
   return origin;
 }
-async function body(request: Request) {
+export async function body(request: Request) {
   // Limit streaming input too; Content-Length alone is untrusted.
   const reader = request.body?.getReader();
   if (!reader) fail("INVALID_BODY", "요청 본문이 없습니다.");
@@ -75,7 +75,7 @@ async function body(request: Request) {
   try { return JSON.parse(new TextDecoder().decode(bytes)); } catch { fail("INVALID_BODY", "요청을 읽을 수 없습니다."); }
 }
 export function base64url(bytes: Uint8Array) { return btoa(String.fromCharCode(...bytes)).replaceAll("+", "-").replaceAll("/", "_").replaceAll("=", ""); }
-async function hash(value: string) { return base64url(new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(value)))); }
+export async function hash(value: string) { return base64url(new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(value)))); }
 function cookieName(origin: string) { return origin.startsWith("https:") ? "__Host-pk-registration" : "pk-registration-local"; }
 async function browserBinding(request: Request, create = false) {
   const origin = originFor(request); const name = cookieName(origin);

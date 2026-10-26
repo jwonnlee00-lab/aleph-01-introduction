@@ -1,0 +1,15 @@
+{
+  "actualDevice": true,
+  "source": "사용자 Chrome 확인 및 운영 DB 대조",
+  "successfulLoginCount": 1,
+  "sessionCount": 1,
+  "revokedSessionCount": 1,
+  "userConfirmed": {
+    "privateItemsVisible": 3,
+    "lockedAfterLogout": true
+  },
+  "sessionIdentification": "server-side session; token only in HttpOnly cookie; hash only in DB",
+  "cookieAndTokenValues": "excluded",
+  "rawLoginRequests": "not published",
+  "accountAndCredentialIds": "excluded"
+}

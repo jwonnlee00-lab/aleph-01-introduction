@@ -1,0 +1,28 @@
+{
+  "base": "http://127.0.0.1:5173",
+  "checkedAt": "2026-10-26T02:33:53.633Z",
+  "privateItemCount": 3,
+  "results": [
+    {
+      "path": "/",
+      "status": 200,
+      "privateContentAbsent": true
+    },
+    {
+      "path": "/private",
+      "status": 200,
+      "privateContentAbsent": true
+    },
+    {
+      "path": "/api/private/items",
+      "status": 401,
+      "privateContentAbsent": true
+    },
+    {
+      "path": "/api/private/items",
+      "status": 401,
+      "privateContentAbsent": true
+    }
+  ],
+  "clientScriptsChecked": 3
+}

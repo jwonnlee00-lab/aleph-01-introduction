@@ -1,0 +1,19 @@
+{
+  "fixtureOnly": true,
+  "checkedAt": "2026-10-26T02:33:20.530Z",
+  "requests": 44,
+  "challenges": [
+    "T7V-UqmQFza2a3kubQX-vN0e4nPtx0IS1_Dlz10p5to",
+    "crrR68G5RM56Zhr06kzKvS2Alj_AafLzsTK4rmID_Qo"
+  ],
+  "challengeDifferent": true,
+  "signatureVerified": true,
+  "wrongSignatureRejected": true,
+  "replayRejected": true,
+  "privateItemsAfterLogin": 3,
+  "logoutOldCookieRejected": true,
+  "sessionRotationVerified": true,
+  "sessionExpiryVerified": true,
+  "maskedCookieValues": true,
+  "noPasswordInputs": true
+}

@@ -1,0 +1,1219 @@
+{
+  "fixtureOnly": true,
+  "actualDeviceNotUsed": true,
+  "records": [
+    {
+      "case": "register local fixture",
+      "request": {
+        "method": "POST",
+        "path": "/api/passkeys/register/options",
+        "headers": {
+          "Origin": "http://localhost:5173"
+        },
+        "body": {
+          "name": "카드 3 소프트웨어 시험 열쇠",
+          "storageLocation": "기기 자체"
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "attemptId": "6DUmL8hfXEtTg2g4DGXpbDr5SiWc2CzBU8WkbRRMIo4",
+          "options": {
+            "challenge": "Xoxd6he7MMrqcnKyJ5UWuF8VEfhsUwC1h7UYO_attnk",
+            "rp": {
+              "name": "정원의 나만의 자리",
+              "id": "localhost"
+            },
+            "user": {
+              "id": "NmpNbzM0eldza0xsdlB2ZFhVZ041V2lVNm5LMFVhVlMtc01VZjN2NEl2UQ",
+              "name": "site-owner",
+              "displayName": "사이트 소유자"
+            },
+            "pubKeyCredParams": [
+              {
+                "alg": -7,
+                "type": "public-key"
+              },
+              {
+                "alg": -257,
+                "type": "public-key"
+              }
+            ],
+            "timeout": 120000,
+            "attestation": "none",
+            "excludeCredentials": [
+              {
+                "id": "Dq0XaeOodsj0d2BLNmYHLbwmNDIBOiB2O4urscpiJ2k",
+                "type": "public-key"
+              }
+            ],
+            "authenticatorSelection": {
+              "residentKey": "required",
+              "userVerification": "required",
+              "requireResidentKey": true
+            },
+            "extensions": {
+              "credProps": true
+            },
+            "hints": []
+          },
+          "expiresAt": 1792982300047
+        },
+        "setCookie": "[COOKIE_VALUE_REDACTED]; Path=/; HttpOnly; SameSite=Strict; Max-Age=600"
+      }
+    },
+    {
+      "case": "verify fixture registration",
+      "request": {
+        "method": "POST",
+        "path": "/api/passkeys/register/verify",
+        "headers": {
+          "Origin": "http://localhost:5173",
+          "Cookie": "[REDACTED]"
+        },
+        "body": {
+          "attemptId": "6DUmL8hfXEtTg2g4DGXpbDr5SiWc2CzBU8WkbRRMIo4",
+          "credential": {
+            "id": "YLzzWsC5u-GGKb-nhsnY-hoJg7k6x8RP_aJkaSvXLNQ",
+            "rawId": "YLzzWsC5u-GGKb-nhsnY-hoJg7k6x8RP_aJkaSvXLNQ",
+            "type": "public-key",
+            "response": {
+              "clientDataJSON": "eyJ0eXBlIjoid2ViYXV0aG4uY3JlYXRlIiwiY2hhbGxlbmdlIjoiWG94ZDZoZTdNTXJxY25LeUo1VVd1RjhWRWZoc1V3QzFoN1VZT19hdHRuayIsIm9yaWdpbiI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTE3MyIsImNyb3NzT3JpZ2luIjpmYWxzZX0",
+              "attestationObject": "o2NmbXRkbm9uZWdhdHRTdG10oGhhdXRoRGF0YVikSZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2NFAAAAAAAAAAAAAAAAAAAAAAAAAAAAIGC881rAubvhhim_p4bJ2PoaCYO5OsfET_2iZGkr1yzUpQECAyYgASFYIPDTK_mPskNI-KXZSH46xPi2rkV68mhyM1slfPaFBIGeIlggW0cQoQkvVYqjIMfihdttu2hodBP2LI53gA3QTxuD2Sk",
+              "transports": [
+                "internal"
+              ]
+            },
+            "clientExtensionResults": {
+              "credProps": {
+                "rk": true
+              }
+            }
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "verified": true,
+          "passkey": {
+            "credentialId": "YLzzWsC5u-GGKb-nhsnY-hoJg7k6x8RP_aJkaSvXLNQ",
+            "name": "카드 3 소프트웨어 시험 열쇠",
+            "publicKey": "pQECAyYgASFYIPDTK_mPskNI-KXZSH46xPi2rkV68mhyM1slfPaFBIGeIlggW0cQoQkvVYqjIMfihdttu2hodBP2LI53gA3QTxuD2Sk",
+            "publicKeyFormat": "COSE_Key / base64url",
+            "storageLocation": "기기 자체",
+            "deviceType": "singleDevice",
+            "backedUp": false,
+            "createdAt": 1792982000078
+          },
+          "message": "공개키를 저장했습니다. 비공개 자료는 아직 잠겨 있습니다."
+        }
+      }
+    },
+    {
+      "case": "anonymous private API",
+      "request": {
+        "method": "GET",
+        "path": "/api/private/items",
+        "headers": {
+          "Cookie": "[REDACTED]"
+        }
+      },
+      "response": {
+        "status": 401,
+        "body": {
+          "error": "AUTH_REQUIRED",
+          "message": "패스키 로그인이 필요합니다. 현재는 잠금 상태입니다."
+        }
+      }
+    },
+    {
+      "case": "anonymous private page",
+      "request": {
+        "method": "GET",
+        "path": "/private",
+        "headers": {
+          "Cookie": "[REDACTED]"
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "htmlContainsPrivateContent": false
+        }
+      }
+    },
+    {
+      "case": "ChatGPT identity alone cannot unlock",
+      "request": {
+        "method": "GET",
+        "path": "/api/private/items",
+        "headers": {
+          "Cookie": "[REDACTED]"
+        }
+      },
+      "response": {
+        "status": 401,
+        "body": {
+          "error": "AUTH_REQUIRED",
+          "message": "패스키 로그인이 필요합니다. 현재는 잠금 상태입니다."
+        }
+      }
+    },
+    {
+      "case": "fresh login challenge",
+      "request": {
+        "method": "POST",
+        "path": "/api/passkeys/login/options",
+        "headers": {
+          "Origin": "http://localhost:5173",
+          "Cookie": "[REDACTED]"
+        },
+        "body": {}
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "attemptId": "uaqLIImn3FaZ8Hs0uV6hN_qtm6fJ9JzlNDjlSReO4Gc",
+          "options": {
+            "rpId": "localhost",
+            "challenge": "T7V-UqmQFza2a3kubQX-vN0e4nPtx0IS1_Dlz10p5to",
+            "timeout": 120000,
+            "userVerification": "required"
+          },
+          "expiresAt": 1792982300152
+        },
+        "setCookie": "[COOKIE_VALUE_REDACTED]; Path=/; HttpOnly; SameSite=Strict; Max-Age=600"
+      }
+    },
+    {
+      "case": "fresh login challenge",
+      "request": {
+        "method": "POST",
+        "path": "/api/passkeys/login/options",
+        "headers": {
+          "Origin": "http://localhost:5173",
+          "Cookie": "[REDACTED]"
+        },
+        "body": {}
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "attemptId": "yDCas8N79ZT0JJ8rc7Hirx8ufIvfsAlhelhMHDY-dDM",
+          "options": {
+            "rpId": "localhost",
+            "challenge": "crrR68G5RM56Zhr06kzKvS2Alj_AafLzsTK4rmID_Qo",
+            "timeout": 120000,
+            "userVerification": "required"
+          },
+          "expiresAt": 1792982300164
+        },
+        "setCookie": "[COOKIE_VALUE_REDACTED]; Path=/; HttpOnly; SameSite=Strict; Max-Age=600"
+      }
+    },
+    {
+      "case": "superseded challenge rejected",
+      "request": {
+        "method": "POST",
+        "path": "/api/passkeys/login/verify",
+        "headers": {
+          "Origin": "http://localhost:5173",
+          "Cookie": "[REDACTED]"
+        },
+        "body": {
+          "attemptId": "uaqLIImn3FaZ8Hs0uV6hN_qtm6fJ9JzlNDjlSReO4Gc",
+          "credential": {
+            "id": "YLzzWsC5u-GGKb-nhsnY-hoJg7k6x8RP_aJkaSvXLNQ",
+            "rawId": "YLzzWsC5u-GGKb-nhsnY-hoJg7k6x8RP_aJkaSvXLNQ",
+            "type": "public-key",
+            "response": {
+              "clientDataJSON": "eyJ0eXBlIjoid2ViYXV0aG4uZ2V0IiwiY2hhbGxlbmdlIjoiVDdWLVVxbVFGemEyYTNrdWJRWC12TjBlNG5QdHgwSVMxX0RsejEwcDV0byIsIm9yaWdpbiI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTE3MyIsImNyb3NzT3JpZ2luIjpmYWxzZX0",
+              "authenticatorData": "SZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2MFAAAAAQ",
+              "signature": "MEYCIQC7ruUDIcbOZvEW6m7FzTLVM536CXVo3uZUBABe_iSQIQIhANgalfYy81s19m31vBlawcZk4YkJPh41sLveVn5yLsS9"
+            },
+            "clientExtensionResults": {}
+          }
+        }
+      },
+      "response": {
+        "status": 409,
+        "body": {
+          "error": "CHALLENGE_UNAVAILABLE",
+          "message": "이미 사용했거나 만료·취소된 로그인 질문입니다. 다시 시작해 주세요."
+        }
+      }
+    },
+    {
+      "case": "wrong signature rejected",
+      "request": {
+        "method": "POST",
+        "path": "/api/passkeys/login/verify",
+        "headers": {
+          "Origin": "http://localhost:5173",
+          "Cookie": "[REDACTED]"
+        },
+        "body": {
+          "attemptId": "yDCas8N79ZT0JJ8rc7Hirx8ufIvfsAlhelhMHDY-dDM",
+          "credential": {
+            "id": "YLzzWsC5u-GGKb-nhsnY-hoJg7k6x8RP_aJkaSvXLNQ",
+            "rawId": "YLzzWsC5u-GGKb-nhsnY-hoJg7k6x8RP_aJkaSvXLNQ",
+            "type": "public-key",
+            "response": {
+              "clientDataJSON": "eyJ0eXBlIjoid2ViYXV0aG4uZ2V0IiwiY2hhbGxlbmdlIjoiY3JyUjY4RzVSTTU2WmhyMDZrekt2UzJBbGpfQWFmTHpzVEs0cm1JRF9RbyIsIm9yaWdpbiI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTE3MyIsImNyb3NzT3JpZ2luIjpmYWxzZX0",
+              "authenticatorData": "SZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2MFAAAAAg",
+              "signature": "MEUCIQCeiQPvLFL4SPEk0_rQZ14_-r4FZo6_ZQOhxWbv-QhQcQIgcC_VOUel9khUCWVdhjPjAsXFdR5g6xA4qWwoAC4-a9E"
+            },
+            "clientExtensionResults": {}
+          }
+        }
+      },
+      "response": {
+        "status": 401,
+        "body": {
+          "error": "SIGNATURE_INVALID",
+          "message": "패스키 서명을 확인하지 못했습니다. 등록한 패스키로 다시 시도해 주세요."
+        }
+      }
+    },
+    {
+      "case": "failed challenge cannot be reused",
+      "request": {
+        "method": "POST",
+        "path": "/api/passkeys/login/verify",
+        "headers": {
+          "Origin": "http://localhost:5173",
+          "Cookie": "[REDACTED]"
+        },
+        "body": {
+          "attemptId": "yDCas8N79ZT0JJ8rc7Hirx8ufIvfsAlhelhMHDY-dDM",
+          "credential": {
+            "id": "YLzzWsC5u-GGKb-nhsnY-hoJg7k6x8RP_aJkaSvXLNQ",
+            "rawId": "YLzzWsC5u-GGKb-nhsnY-hoJg7k6x8RP_aJkaSvXLNQ",
+            "type": "public-key",
+            "response": {
+              "clientDataJSON": "eyJ0eXBlIjoid2ViYXV0aG4uZ2V0IiwiY2hhbGxlbmdlIjoiY3JyUjY4RzVSTTU2WmhyMDZrekt2UzJBbGpfQWFmTHpzVEs0cm1JRF9RbyIsIm9yaWdpbiI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTE3MyIsImNyb3NzT3JpZ2luIjpmYWxzZX0",
+              "authenticatorData": "SZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2MFAAAAAw",
+              "signature": "MEUCIQDLIhajD8wcA_hfSssq8SEaDPLG2JTRb2ftU9Ih9cDKPQIgIMpJGomC8o0LhSUcupJdatjSTlbll5M9Xl7eOKlfPyg"
+            },
+            "clientExtensionResults": {}
+          }
+        }
+      },
+      "response": {
+        "status": 409,
+        "body": {
+          "error": "CHALLENGE_UNAVAILABLE",
+          "message": "이미 사용했거나 만료·취소된 로그인 질문입니다. 다시 시작해 주세요."
+        }
+      }
+    },
+    {
+      "case": "fresh login challenge",
+      "request": {
+        "method": "POST",
+        "path": "/api/passkeys/login/options",
+        "headers": {
+          "Origin": "http://localhost:5173",
+          "Cookie": "[REDACTED]"
+        },
+        "body": {}
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "attemptId": "NwsxGN3YS_lW9XIAn8yg8Qw3B6S-T7vqR_mB70xs-WM",
+          "options": {
+            "rpId": "localhost",
+            "challenge": "WTrvCIMt-zhRbd4_oEr0oZK7YyeKMR0zJd8-RCPb1hY",
+            "timeout": 120000,
+            "userVerification": "required"
+          },
+          "expiresAt": 1792982300215
+        },
+        "setCookie": "[COOKIE_VALUE_REDACTED]; Path=/; HttpOnly; SameSite=Strict; Max-Age=600"
+      }
+    },
+    {
+      "case": "valid signature accepted",
+      "request": {
+        "method": "POST",
+        "path": "/api/passkeys/login/verify",
+        "headers": {
+          "Origin": "http://localhost:5173",
+          "Cookie": "[REDACTED]"
+        },
+        "body": {
+          "attemptId": "NwsxGN3YS_lW9XIAn8yg8Qw3B6S-T7vqR_mB70xs-WM",
+          "credential": {
+            "id": "YLzzWsC5u-GGKb-nhsnY-hoJg7k6x8RP_aJkaSvXLNQ",
+            "rawId": "YLzzWsC5u-GGKb-nhsnY-hoJg7k6x8RP_aJkaSvXLNQ",
+            "type": "public-key",
+            "response": {
+              "clientDataJSON": "eyJ0eXBlIjoid2ViYXV0aG4uZ2V0IiwiY2hhbGxlbmdlIjoiV1RydkNJTXQtemhSYmQ0X29FcjBvWks3WXllS01SMHpKZDgtUkNQYjFoWSIsIm9yaWdpbiI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTE3MyIsImNyb3NzT3JpZ2luIjpmYWxzZX0",
+              "authenticatorData": "SZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2MFAAAABA",
+              "signature": "MEUCIHrvR9ToB1FOtPOWcIFdft1fneBw5EeJnmdCtB574CYzAiEAlzFvyw-uumoMCiYf-Mc6VYdTiJCsj-vzse48-ogpdF4"
+            },
+            "clientExtensionResults": {}
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "verified": true,
+          "session": {
+            "type": "server-side",
+            "expiresAt": 1792985600225
+          },
+          "next": "/private"
+        },
+        "setCookie": "[COOKIE_VALUE_REDACTED]; Path=/; HttpOnly; SameSite=Strict; Max-Age=3600"
+      }
+    },
+    {
+      "case": "verified session gets three items",
+      "request": {
+        "method": "GET",
+        "path": "/api/private/items",
+        "headers": {
+          "Cookie": "[REDACTED]"
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "items": [
+            {
+              "id": "project",
+              "title": "준비 중인 프로젝트 메모",
+              "body": "가상 프로젝트 달빛: 퍼즐 풀이 기록장을 만들고, 주말마다 화면 하나씩 완성한다."
+            },
+            {
+              "id": "applications",
+              "title": "지원 계획",
+              "body": "가상 기업 별숲 연구소와 구름 공방의 공고를 비교하고, 연습용 포트폴리오를 정리한다."
+            },
+            {
+              "id": "reflection",
+              "title": "개인 회고",
+              "body": "연습 회고: 서두르기보다 작은 기능을 끝까지 확인하자. 다음에는 오류 응답부터 기록한다."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "case": "verified session renders private page",
+      "request": {
+        "method": "GET",
+        "path": "/private",
+        "headers": {
+          "Cookie": "[REDACTED]"
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "htmlContainsPrivateContent": true
+        }
+      }
+    },
+    {
+      "case": "successful challenge replay rejected",
+      "request": {
+        "method": "POST",
+        "path": "/api/passkeys/login/verify",
+        "headers": {
+          "Origin": "http://localhost:5173",
+          "Cookie": "[REDACTED]"
+        },
+        "body": {
+          "attemptId": "NwsxGN3YS_lW9XIAn8yg8Qw3B6S-T7vqR_mB70xs-WM",
+          "credential": {
+            "id": "YLzzWsC5u-GGKb-nhsnY-hoJg7k6x8RP_aJkaSvXLNQ",
+            "rawId": "YLzzWsC5u-GGKb-nhsnY-hoJg7k6x8RP_aJkaSvXLNQ",
+            "type": "public-key",
+            "response": {
+              "clientDataJSON": "eyJ0eXBlIjoid2ViYXV0aG4uZ2V0IiwiY2hhbGxlbmdlIjoiV1RydkNJTXQtemhSYmQ0X29FcjBvWks3WXllS01SMHpKZDgtUkNQYjFoWSIsIm9yaWdpbiI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTE3MyIsImNyb3NzT3JpZ2luIjpmYWxzZX0",
+              "authenticatorData": "SZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2MFAAAABA",
+              "signature": "MEUCIHrvR9ToB1FOtPOWcIFdft1fneBw5EeJnmdCtB574CYzAiEAlzFvyw-uumoMCiYf-Mc6VYdTiJCsj-vzse48-ogpdF4"
+            },
+            "clientExtensionResults": {}
+          }
+        }
+      },
+      "response": {
+        "status": 409,
+        "body": {
+          "error": "CHALLENGE_UNAVAILABLE",
+          "message": "이미 사용했거나 만료·취소된 로그인 질문입니다. 다시 시작해 주세요."
+        }
+      }
+    },
+    {
+      "case": "fresh login challenge",
+      "request": {
+        "method": "POST",
+        "path": "/api/passkeys/login/options",
+        "headers": {
+          "Origin": "http://localhost:5173",
+          "Cookie": "[REDACTED]"
+        },
+        "body": {}
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "attemptId": "pD72e7YAE2kK3ljyMiREwvdj0K26J86bhZqzR_LIc0E",
+          "options": {
+            "rpId": "localhost",
+            "challenge": "62-miN0iuBW11RSwYZQoRaXcwEIq1bRV8BVDn3w07rM",
+            "timeout": 120000,
+            "userVerification": "required"
+          },
+          "expiresAt": 1792982300264
+        },
+        "setCookie": "[COOKIE_VALUE_REDACTED]; Path=/; HttpOnly; SameSite=Strict; Max-Age=600"
+      }
+    },
+    {
+      "case": "new login rotates session",
+      "request": {
+        "method": "POST",
+        "path": "/api/passkeys/login/verify",
+        "headers": {
+          "Origin": "http://localhost:5173",
+          "Cookie": "[REDACTED]"
+        },
+        "body": {
+          "attemptId": "pD72e7YAE2kK3ljyMiREwvdj0K26J86bhZqzR_LIc0E",
+          "credential": {
+            "id": "YLzzWsC5u-GGKb-nhsnY-hoJg7k6x8RP_aJkaSvXLNQ",
+            "rawId": "YLzzWsC5u-GGKb-nhsnY-hoJg7k6x8RP_aJkaSvXLNQ",
+            "type": "public-key",
+            "response": {
+              "clientDataJSON": "eyJ0eXBlIjoid2ViYXV0aG4uZ2V0IiwiY2hhbGxlbmdlIjoiNjItbWlOMGl1QlcxMVJTd1laUW9SYVhjd0VJcTFiUlY4QlZEbjN3MDdyTSIsIm9yaWdpbiI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTE3MyIsImNyb3NzT3JpZ2luIjpmYWxzZX0",
+              "authenticatorData": "SZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2MFAAAABQ",
+              "signature": "MEUCIQD9BuI8w0UMYNiPkgvlM7-JfnDp8FmuDW7d9TxS9LK2kgIgEi03-GKyUnmgiHcV5McY9qZ36oDpUJSx3srZduBNzq0"
+            },
+            "clientExtensionResults": {}
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "verified": true,
+          "session": {
+            "type": "server-side",
+            "expiresAt": 1792985600275
+          },
+          "next": "/private"
+        },
+        "setCookie": "[COOKIE_VALUE_REDACTED]; Path=/; HttpOnly; SameSite=Strict; Max-Age=3600"
+      }
+    },
+    {
+      "case": "rotated old session rejected",
+      "request": {
+        "method": "GET",
+        "path": "/api/private/items",
+        "headers": {
+          "Cookie": "[REDACTED]"
+        }
+      },
+      "response": {
+        "status": 401,
+        "body": {
+          "error": "AUTH_REQUIRED",
+          "message": "패스키 로그인이 필요합니다. 현재는 잠금 상태입니다."
+        }
+      }
+    },
+    {
+      "case": "current session works",
+      "request": {
+        "method": "GET",
+        "path": "/api/private/items",
+        "headers": {
+          "Cookie": "[REDACTED]"
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "items": [
+            {
+              "id": "project",
+              "title": "준비 중인 프로젝트 메모",
+              "body": "가상 프로젝트 달빛: 퍼즐 풀이 기록장을 만들고, 주말마다 화면 하나씩 완성한다."
+            },
+            {
+              "id": "applications",
+              "title": "지원 계획",
+              "body": "가상 기업 별숲 연구소와 구름 공방의 공고를 비교하고, 연습용 포트폴리오를 정리한다."
+            },
+            {
+              "id": "reflection",
+              "title": "개인 회고",
+              "body": "연습 회고: 서두르기보다 작은 기능을 끝까지 확인하자. 다음에는 오류 응답부터 기록한다."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "case": "logout revokes server session",
+      "request": {
+        "method": "POST",
+        "path": "/api/passkeys/logout",
+        "headers": {
+          "Origin": "http://localhost:5173",
+          "Cookie": "[REDACTED]"
+        },
+        "body": {}
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "loggedOut": true
+        },
+        "setCookie": "[COOKIE_VALUE_REDACTED]; Path=/; HttpOnly; SameSite=Strict; Max-Age=0"
+      }
+    },
+    {
+      "case": "same saved cookie after logout rejected",
+      "request": {
+        "method": "GET",
+        "path": "/api/private/items",
+        "headers": {
+          "Cookie": "[REDACTED]"
+        }
+      },
+      "response": {
+        "status": 401,
+        "body": {
+          "error": "AUTH_REQUIRED",
+          "message": "패스키 로그인이 필요합니다. 현재는 잠금 상태입니다."
+        }
+      }
+    },
+    {
+      "case": "logged-out page hides content",
+      "request": {
+        "method": "GET",
+        "path": "/private",
+        "headers": {
+          "Cookie": "[REDACTED]"
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "htmlContainsPrivateContent": false
+        }
+      }
+    },
+    {
+      "case": "fresh login challenge",
+      "request": {
+        "method": "POST",
+        "path": "/api/passkeys/login/options",
+        "headers": {
+          "Origin": "http://localhost:5173",
+          "Cookie": "[REDACTED]"
+        },
+        "body": {}
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "attemptId": "nowvDsGuXf3YXd-TcBGSZYAmgOeWE5oe-Yab9Au71Q8",
+          "options": {
+            "rpId": "localhost",
+            "challenge": "V_AwtmxA_m-17hf4zVaTYu1uxvRtOBfGJ94rvw2XF_U",
+            "timeout": 120000,
+            "userVerification": "required"
+          },
+          "expiresAt": 1792982300325
+        },
+        "setCookie": "[COOKIE_VALUE_REDACTED]; Path=/; HttpOnly; SameSite=Strict; Max-Age=600"
+      }
+    },
+    {
+      "case": "different private key with registered ID rejected",
+      "request": {
+        "method": "POST",
+        "path": "/api/passkeys/login/verify",
+        "headers": {
+          "Origin": "http://localhost:5173",
+          "Cookie": "[REDACTED]"
+        },
+        "body": {
+          "attemptId": "nowvDsGuXf3YXd-TcBGSZYAmgOeWE5oe-Yab9Au71Q8",
+          "credential": {
+            "id": "YLzzWsC5u-GGKb-nhsnY-hoJg7k6x8RP_aJkaSvXLNQ",
+            "rawId": "YLzzWsC5u-GGKb-nhsnY-hoJg7k6x8RP_aJkaSvXLNQ",
+            "type": "public-key",
+            "response": {
+              "clientDataJSON": "eyJ0eXBlIjoid2ViYXV0aG4uZ2V0IiwiY2hhbGxlbmdlIjoiVl9Bd3RteEFfbS0xN2hmNHpWYVRZdTF1eHZSdE9CZkdKOTRydncyWEZfVSIsIm9yaWdpbiI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTE3MyIsImNyb3NzT3JpZ2luIjpmYWxzZX0",
+              "authenticatorData": "SZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2MFAAAABg",
+              "signature": "MEUCIHdJFIhDEQgPsxL5MYFkOmvlZAYgMWmUZNAsqxoJ9HBnAiEA03ImSMtEu-_iZJxHTF666vUUlt5uk5ilA3vVtXmsVRA"
+            },
+            "clientExtensionResults": {}
+          }
+        }
+      },
+      "response": {
+        "status": 401,
+        "body": {
+          "error": "SIGNATURE_INVALID",
+          "message": "패스키 서명을 확인하지 못했습니다. 등록한 패스키로 다시 시도해 주세요."
+        }
+      }
+    },
+    {
+      "case": "fresh login challenge",
+      "request": {
+        "method": "POST",
+        "path": "/api/passkeys/login/options",
+        "headers": {
+          "Origin": "http://localhost:5173",
+          "Cookie": "[REDACTED]"
+        },
+        "body": {}
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "attemptId": "0rqXMx3F7Suj2VxYVVCgfNqTxU6stnfRm40KncoguYo",
+          "options": {
+            "rpId": "localhost",
+            "challenge": "GzjmvDqRnnPBBEMun7ZGtR3OkSuaVCEYctdJw-8yTJc",
+            "timeout": 120000,
+            "userVerification": "required"
+          },
+          "expiresAt": 1792982300347
+        },
+        "setCookie": "[COOKIE_VALUE_REDACTED]; Path=/; HttpOnly; SameSite=Strict; Max-Age=600"
+      }
+    },
+    {
+      "case": "unregistered credential rejected",
+      "request": {
+        "method": "POST",
+        "path": "/api/passkeys/login/verify",
+        "headers": {
+          "Origin": "http://localhost:5173",
+          "Cookie": "[REDACTED]"
+        },
+        "body": {
+          "attemptId": "0rqXMx3F7Suj2VxYVVCgfNqTxU6stnfRm40KncoguYo",
+          "credential": {
+            "id": "tHe5eKvWbtV1gZv5WlBXOnyxIVFlK_sP26qMteBK4dI",
+            "rawId": "tHe5eKvWbtV1gZv5WlBXOnyxIVFlK_sP26qMteBK4dI",
+            "type": "public-key",
+            "response": {
+              "clientDataJSON": "eyJ0eXBlIjoid2ViYXV0aG4uZ2V0IiwiY2hhbGxlbmdlIjoiR3pqbXZEcVJublBCQkVNdW43Wkd0UjNPa1N1YVZDRVljdGRKdy04eVRKYyIsIm9yaWdpbiI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTE3MyIsImNyb3NzT3JpZ2luIjpmYWxzZX0",
+              "authenticatorData": "SZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2MFAAAABw",
+              "signature": "MEYCIQCDxT_6FiRwaLPPgTq_yQIk-toaBerDYsiTIwAOegPhXAIhAJKLu6fuBUL1kqSdWpEpHpi4eCLJxcSyi-a--J5oHA6t"
+            },
+            "clientExtensionResults": {}
+          }
+        }
+      },
+      "response": {
+        "status": 401,
+        "body": {
+          "error": "UNKNOWN_PASSKEY",
+          "message": "패스키 서명을 확인하지 못했습니다. 등록한 패스키로 다시 시도해 주세요."
+        }
+      }
+    },
+    {
+      "case": "fresh login challenge",
+      "request": {
+        "method": "POST",
+        "path": "/api/passkeys/login/options",
+        "headers": {
+          "Origin": "http://localhost:5173",
+          "Cookie": "[REDACTED]"
+        },
+        "body": {}
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "attemptId": "I654bLHHwKtCvV0xnPV5jibNNXnv1brDXpUnkxdPKVo",
+          "options": {
+            "rpId": "localhost",
+            "challenge": "5kW2LhOfvIUvw-mM1T5U9Pd1LII0jSZzApNTzIH4QY8",
+            "timeout": 120000,
+            "userVerification": "required"
+          },
+          "expiresAt": 1792982300369
+        },
+        "setCookie": "[COOKIE_VALUE_REDACTED]; Path=/; HttpOnly; SameSite=Strict; Max-Age=600"
+      }
+    },
+    {
+      "case": "signed wrong origin rejected",
+      "request": {
+        "method": "POST",
+        "path": "/api/passkeys/login/verify",
+        "headers": {
+          "Origin": "http://localhost:5173",
+          "Cookie": "[REDACTED]"
+        },
+        "body": {
+          "attemptId": "I654bLHHwKtCvV0xnPV5jibNNXnv1brDXpUnkxdPKVo",
+          "credential": {
+            "id": "YLzzWsC5u-GGKb-nhsnY-hoJg7k6x8RP_aJkaSvXLNQ",
+            "rawId": "YLzzWsC5u-GGKb-nhsnY-hoJg7k6x8RP_aJkaSvXLNQ",
+            "type": "public-key",
+            "response": {
+              "clientDataJSON": "eyJ0eXBlIjoid2ViYXV0aG4uZ2V0IiwiY2hhbGxlbmdlIjoiNWtXMkxoT2Z2SVV2dy1tTTFUNVU5UGQxTElJMGpTWnpBcE5UeklINFFZOCIsIm9yaWdpbiI6Imh0dHBzOi8vb3RoZXIuZXhhbXBsZS50ZXN0IiwiY3Jvc3NPcmlnaW4iOmZhbHNlfQ",
+              "authenticatorData": "SZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2MFAAAACA",
+              "signature": "MEQCIHNdK6W7AdRUhDaSuDmUI25_V1o9K37ET5uv0eHaT-OPAiBA7dqOQSwz16ATaDcRt4nK8yOSeL8K2A_sSloou09LtQ"
+            },
+            "clientExtensionResults": {}
+          }
+        }
+      },
+      "response": {
+        "status": 401,
+        "body": {
+          "error": "SIGNATURE_INVALID",
+          "message": "패스키 서명을 확인하지 못했습니다. 등록한 패스키로 다시 시도해 주세요."
+        }
+      }
+    },
+    {
+      "case": "fresh login challenge",
+      "request": {
+        "method": "POST",
+        "path": "/api/passkeys/login/options",
+        "headers": {
+          "Origin": "http://localhost:5173",
+          "Cookie": "[REDACTED]"
+        },
+        "body": {}
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "attemptId": "DKaKEG1xmHUvoTEIPYjJfLyhDZyApcngsGKY1Phyd4A",
+          "options": {
+            "rpId": "localhost",
+            "challenge": "TWbwx1gI3jl06E7fx7I2Xp7seZRwmlouJwpRY3ABfgE",
+            "timeout": 120000,
+            "userVerification": "required"
+          },
+          "expiresAt": 1792982300391
+        },
+        "setCookie": "[COOKIE_VALUE_REDACTED]; Path=/; HttpOnly; SameSite=Strict; Max-Age=600"
+      }
+    },
+    {
+      "case": "signed wrong RP ID rejected",
+      "request": {
+        "method": "POST",
+        "path": "/api/passkeys/login/verify",
+        "headers": {
+          "Origin": "http://localhost:5173",
+          "Cookie": "[REDACTED]"
+        },
+        "body": {
+          "attemptId": "DKaKEG1xmHUvoTEIPYjJfLyhDZyApcngsGKY1Phyd4A",
+          "credential": {
+            "id": "YLzzWsC5u-GGKb-nhsnY-hoJg7k6x8RP_aJkaSvXLNQ",
+            "rawId": "YLzzWsC5u-GGKb-nhsnY-hoJg7k6x8RP_aJkaSvXLNQ",
+            "type": "public-key",
+            "response": {
+              "clientDataJSON": "eyJ0eXBlIjoid2ViYXV0aG4uZ2V0IiwiY2hhbGxlbmdlIjoiVFdid3gxZ0kzamwwNkU3Zng3STJYcDdzZVpSd21sb3VKd3BSWTNBQmZnRSIsIm9yaWdpbiI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTE3MyIsImNyb3NzT3JpZ2luIjpmYWxzZX0",
+              "authenticatorData": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFAAAACQ",
+              "signature": "MEUCIAvoAkfy8DnDzZb-g0idrOLAdVgDDoRTHTXY39XvcVY9AiEAsqzbuMrP1wzD6IrnTPsTUNkmuKNI8sgwhrXbOhJxOS4"
+            },
+            "clientExtensionResults": {}
+          }
+        }
+      },
+      "response": {
+        "status": 401,
+        "body": {
+          "error": "SIGNATURE_INVALID",
+          "message": "패스키 서명을 확인하지 못했습니다. 등록한 패스키로 다시 시도해 주세요."
+        }
+      }
+    },
+    {
+      "case": "fresh login challenge",
+      "request": {
+        "method": "POST",
+        "path": "/api/passkeys/login/options",
+        "headers": {
+          "Origin": "http://localhost:5173",
+          "Cookie": "[REDACTED]"
+        },
+        "body": {}
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "attemptId": "PPPzugI5RvTexB3gr1bA4V4rrLFIpOqBtNoPRIAXDtA",
+          "options": {
+            "rpId": "localhost",
+            "challenge": "QUY2_HCHMmGUkIkCnOpbOa6PVir7ingsvBwPOF-AigM",
+            "timeout": 120000,
+            "userVerification": "required"
+          },
+          "expiresAt": 1792982300413
+        },
+        "setCookie": "[COOKIE_VALUE_REDACTED]; Path=/; HttpOnly; SameSite=Strict; Max-Age=600"
+      }
+    },
+    {
+      "case": "missing user verification rejected",
+      "request": {
+        "method": "POST",
+        "path": "/api/passkeys/login/verify",
+        "headers": {
+          "Origin": "http://localhost:5173",
+          "Cookie": "[REDACTED]"
+        },
+        "body": {
+          "attemptId": "PPPzugI5RvTexB3gr1bA4V4rrLFIpOqBtNoPRIAXDtA",
+          "credential": {
+            "id": "YLzzWsC5u-GGKb-nhsnY-hoJg7k6x8RP_aJkaSvXLNQ",
+            "rawId": "YLzzWsC5u-GGKb-nhsnY-hoJg7k6x8RP_aJkaSvXLNQ",
+            "type": "public-key",
+            "response": {
+              "clientDataJSON": "eyJ0eXBlIjoid2ViYXV0aG4uZ2V0IiwiY2hhbGxlbmdlIjoiUVVZMl9IQ0hNbUdVa0lrQ25PcGJPYTZQVmlyN2luZ3N2QndQT0YtQWlnTSIsIm9yaWdpbiI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTE3MyIsImNyb3NzT3JpZ2luIjpmYWxzZX0",
+              "authenticatorData": "SZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2MBAAAACg",
+              "signature": "MEUCIBGUFYkWzsfVnYw_Y1QwnJJAt6s53z_BUTRlm7KCbUkXAiEA1iMmY5efTZy1U3rFVPKMJ7_1sZY3gwSBjLjLNJOamY8"
+            },
+            "clientExtensionResults": {}
+          }
+        }
+      },
+      "response": {
+        "status": 401,
+        "body": {
+          "error": "SIGNATURE_INVALID",
+          "message": "패스키 서명을 확인하지 못했습니다. 등록한 패스키로 다시 시도해 주세요."
+        }
+      }
+    },
+    {
+      "case": "fresh login challenge",
+      "request": {
+        "method": "POST",
+        "path": "/api/passkeys/login/options",
+        "headers": {
+          "Origin": "http://localhost:5173",
+          "Cookie": "[REDACTED]"
+        },
+        "body": {}
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "attemptId": "0RS8xqlo3Hw1j9IXMZh2mGAQ7D3Rx-58_a6pafz-UD0",
+          "options": {
+            "rpId": "localhost",
+            "challenge": "V26yDVMK4WgdRtpeRs9yjePTmTs4SZOw7tF-oUrlQoQ",
+            "timeout": 120000,
+            "userVerification": "required"
+          },
+          "expiresAt": 1792982300433
+        },
+        "setCookie": "[COOKIE_VALUE_REDACTED]; Path=/; HttpOnly; SameSite=Strict; Max-Age=600"
+      }
+    },
+    {
+      "case": "expired login challenge rejected",
+      "request": {
+        "method": "POST",
+        "path": "/api/passkeys/login/verify",
+        "headers": {
+          "Origin": "http://localhost:5173",
+          "Cookie": "[REDACTED]"
+        },
+        "body": {
+          "attemptId": "0RS8xqlo3Hw1j9IXMZh2mGAQ7D3Rx-58_a6pafz-UD0",
+          "credential": {
+            "id": "YLzzWsC5u-GGKb-nhsnY-hoJg7k6x8RP_aJkaSvXLNQ",
+            "rawId": "YLzzWsC5u-GGKb-nhsnY-hoJg7k6x8RP_aJkaSvXLNQ",
+            "type": "public-key",
+            "response": {
+              "clientDataJSON": "eyJ0eXBlIjoid2ViYXV0aG4uZ2V0IiwiY2hhbGxlbmdlIjoiVjI2eURWTUs0V2dkUnRwZVJzOXlqZVBUbVRzNFNaT3c3dEYtb1VybFFvUSIsIm9yaWdpbiI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTE3MyIsImNyb3NzT3JpZ2luIjpmYWxzZX0",
+              "authenticatorData": "SZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2MFAAAACw",
+              "signature": "MEUCIQCod4Q6lEIOZBJO5joTRuXYE6YyjpoDW6M8CmpXNfzuXgIgWWMqvMzsWnOksHA1qYqz9IKA7JNhXtFnm4TzG9qFlBI"
+            },
+            "clientExtensionResults": {}
+          }
+        }
+      },
+      "response": {
+        "status": 409,
+        "body": {
+          "error": "CHALLENGE_UNAVAILABLE",
+          "message": "이미 사용했거나 만료·취소된 로그인 질문입니다. 다시 시작해 주세요."
+        }
+      }
+    },
+    {
+      "case": "fresh login challenge",
+      "request": {
+        "method": "POST",
+        "path": "/api/passkeys/login/options",
+        "headers": {
+          "Origin": "http://localhost:5173",
+          "Cookie": "[REDACTED]"
+        },
+        "body": {}
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "attemptId": "JIUCGfMs0QERZebchs2Lu6F4BYqzh3tl5VmqVhmjO2Y",
+          "options": {
+            "rpId": "localhost",
+            "challenge": "MMRReMpvNoQ_qQBrnCANQN5N-VyBihDD7QMVyDuhQEI",
+            "timeout": 120000,
+            "userVerification": "required"
+          },
+          "expiresAt": 1792982300453
+        },
+        "setCookie": "[COOKIE_VALUE_REDACTED]; Path=/; HttpOnly; SameSite=Strict; Max-Age=600"
+      }
+    },
+    {
+      "case": "cancel login",
+      "request": {
+        "method": "POST",
+        "path": "/api/passkeys/login/cancel",
+        "headers": {
+          "Origin": "http://localhost:5173",
+          "Cookie": "[REDACTED]"
+        },
+        "body": {
+          "attemptId": "JIUCGfMs0QERZebchs2Lu6F4BYqzh3tl5VmqVhmjO2Y"
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "cancelled": true
+        }
+      }
+    },
+    {
+      "case": "cancelled challenge rejected",
+      "request": {
+        "method": "POST",
+        "path": "/api/passkeys/login/verify",
+        "headers": {
+          "Origin": "http://localhost:5173",
+          "Cookie": "[REDACTED]"
+        },
+        "body": {
+          "attemptId": "JIUCGfMs0QERZebchs2Lu6F4BYqzh3tl5VmqVhmjO2Y",
+          "credential": {
+            "id": "YLzzWsC5u-GGKb-nhsnY-hoJg7k6x8RP_aJkaSvXLNQ",
+            "rawId": "YLzzWsC5u-GGKb-nhsnY-hoJg7k6x8RP_aJkaSvXLNQ",
+            "type": "public-key",
+            "response": {
+              "clientDataJSON": "eyJ0eXBlIjoid2ViYXV0aG4uZ2V0IiwiY2hhbGxlbmdlIjoiTU1SUmVNcHZOb1FfcVFCcm5DQU5RTjVOLVZ5QmloREQ3UU1WeUR1aFFFSSIsIm9yaWdpbiI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTE3MyIsImNyb3NzT3JpZ2luIjpmYWxzZX0",
+              "authenticatorData": "SZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2MFAAAADA",
+              "signature": "MEYCIQDEOru68JthaWceuvZ-Hawjum3xKK-UUthF9dDTXkjKnwIhANOCb2YNHCj9-Wpr4N0QOWRQOiCMdUViCvbTfBzooqOY"
+            },
+            "clientExtensionResults": {}
+          }
+        }
+      },
+      "response": {
+        "status": 409,
+        "body": {
+          "error": "CHALLENGE_UNAVAILABLE",
+          "message": "이미 사용했거나 만료·취소된 로그인 질문입니다. 다시 시작해 주세요."
+        }
+      }
+    },
+    {
+      "case": "fresh login challenge",
+      "request": {
+        "method": "POST",
+        "path": "/api/passkeys/login/options",
+        "headers": {
+          "Origin": "http://localhost:5173",
+          "Cookie": "[REDACTED]"
+        },
+        "body": {}
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "attemptId": "T0JsBywfJBr8XjHimybcGmRIdR8dMS9F8kkxsgbKxc4",
+          "options": {
+            "rpId": "localhost",
+            "challenge": "8aDBzAHgdFEE4xJhEgzNMmLqvul6GYoO6LyJlq8KViM",
+            "timeout": 120000,
+            "userVerification": "required"
+          },
+          "expiresAt": 1792982300477
+        },
+        "setCookie": "[COOKIE_VALUE_REDACTED]; Path=/; HttpOnly; SameSite=Strict; Max-Age=600"
+      }
+    },
+    {
+      "case": "different browser binding rejected",
+      "request": {
+        "method": "POST",
+        "path": "/api/passkeys/login/verify",
+        "headers": {
+          "Origin": "http://localhost:5173"
+        },
+        "body": {
+          "attemptId": "T0JsBywfJBr8XjHimybcGmRIdR8dMS9F8kkxsgbKxc4",
+          "credential": {
+            "id": "YLzzWsC5u-GGKb-nhsnY-hoJg7k6x8RP_aJkaSvXLNQ",
+            "rawId": "YLzzWsC5u-GGKb-nhsnY-hoJg7k6x8RP_aJkaSvXLNQ",
+            "type": "public-key",
+            "response": {
+              "clientDataJSON": "eyJ0eXBlIjoid2ViYXV0aG4uZ2V0IiwiY2hhbGxlbmdlIjoiOGFEQnpBSGdkRkVFNHhKaEVnek5NbUxxdnVsNkdZb082THlKbHE4S1ZpTSIsIm9yaWdpbiI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTE3MyIsImNyb3NzT3JpZ2luIjpmYWxzZX0",
+              "authenticatorData": "SZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2MFAAAADQ",
+              "signature": "MEUCIDv7OTB1r9WbJNs4e6RLj3k5eMZcO08dIm-XVdGres8PAiEAunSBACEmMLeBezli4wpvEag1Ihr4UlaDKZHiNVzo3ts"
+            },
+            "clientExtensionResults": {}
+          }
+        }
+      },
+      "response": {
+        "status": 400,
+        "body": {
+          "error": "LOGIN_EXPIRED",
+          "message": "로그인 정보를 찾지 못했습니다. 다시 시작해 주세요."
+        }
+      }
+    },
+    {
+      "case": "cross-origin options rejected",
+      "request": {
+        "method": "POST",
+        "path": "/api/passkeys/login/options",
+        "headers": {
+          "Origin": "https://other.example.test",
+          "Cookie": "[REDACTED]"
+        },
+        "body": {}
+      },
+      "response": {
+        "status": 403,
+        "body": {
+          "error": "WRONG_ORIGIN",
+          "message": "같은 사이트에서 등록을 시작해 주세요."
+        }
+      }
+    },
+    {
+      "case": "forged session rejected",
+      "request": {
+        "method": "GET",
+        "path": "/api/private/items",
+        "headers": {
+          "Cookie": "[REDACTED]"
+        }
+      },
+      "response": {
+        "status": 401,
+        "body": {
+          "error": "AUTH_REQUIRED",
+          "message": "패스키 로그인이 필요합니다. 현재는 잠금 상태입니다."
+        }
+      }
+    },
+    {
+      "case": "fresh login challenge",
+      "request": {
+        "method": "POST",
+        "path": "/api/passkeys/login/options",
+        "headers": {
+          "Origin": "http://localhost:5173",
+          "Cookie": "[REDACTED]"
+        },
+        "body": {}
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "attemptId": "mCPXy0_28mpLH6C64oJpaKIgCetEj1DiIVt0osqramQ",
+          "options": {
+            "rpId": "localhost",
+            "challenge": "sHxzm6i8c86j01XsqcYFyR-nlrUh0symXqJCS56a4xg",
+            "timeout": 120000,
+            "userVerification": "required"
+          },
+          "expiresAt": 1792982300500
+        },
+        "setCookie": "[COOKIE_VALUE_REDACTED]; Path=/; HttpOnly; SameSite=Strict; Max-Age=600"
+      }
+    },
+    {
+      "case": "login before expiry test",
+      "request": {
+        "method": "POST",
+        "path": "/api/passkeys/login/verify",
+        "headers": {
+          "Origin": "http://localhost:5173",
+          "Cookie": "[REDACTED]"
+        },
+        "body": {
+          "attemptId": "mCPXy0_28mpLH6C64oJpaKIgCetEj1DiIVt0osqramQ",
+          "credential": {
+            "id": "YLzzWsC5u-GGKb-nhsnY-hoJg7k6x8RP_aJkaSvXLNQ",
+            "rawId": "YLzzWsC5u-GGKb-nhsnY-hoJg7k6x8RP_aJkaSvXLNQ",
+            "type": "public-key",
+            "response": {
+              "clientDataJSON": "eyJ0eXBlIjoid2ViYXV0aG4uZ2V0IiwiY2hhbGxlbmdlIjoic0h4em02aThjODZqMDFYc3FjWUZ5Ui1ubHJVaDBzeW1YcUpDUzU2YTR4ZyIsIm9yaWdpbiI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTE3MyIsImNyb3NzT3JpZ2luIjpmYWxzZX0",
+              "authenticatorData": "SZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2MFAAAADg",
+              "signature": "MEUCIQDidGuDHD9XwUwMEnfxjeQd4RT2XUxQPFeFlNndizHp7AIgb90Hq5-0xE4ow8EOT4Vw99DGfIDjpIPaiSdQmoyWN7g"
+            },
+            "clientExtensionResults": {}
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "verified": true,
+          "session": {
+            "type": "server-side",
+            "expiresAt": 1792985600511
+          },
+          "next": "/private"
+        },
+        "setCookie": "[COOKIE_VALUE_REDACTED]; Path=/; HttpOnly; SameSite=Strict; Max-Age=3600"
+      }
+    },
+    {
+      "case": "expired session rejected",
+      "request": {
+        "method": "GET",
+        "path": "/api/private/items",
+        "headers": {
+          "Cookie": "[REDACTED]"
+        }
+      },
+      "response": {
+        "status": 401,
+        "body": {
+          "error": "AUTH_REQUIRED",
+          "message": "패스키 로그인이 필요합니다. 현재는 잠금 상태입니다."
+        }
+      }
+    }
+  ]
+}

@@ -8,7 +8,7 @@ const items = [
   { id: "reflection", title: "개인 회고", body: "연습 회고: 서두르기보다 작은 기능을 끝까지 확인하자. 다음에는 오류 응답부터 기록한다." },
 ] as const;
 
-export function getPrivateItems() {
-  requirePrivateSession();
+export async function getPrivateItems(request?: Request) {
+  await requirePrivateSession(request);
   return items;
 }
