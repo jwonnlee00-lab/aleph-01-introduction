@@ -1,0 +1,28 @@
+{
+  "base": "https://jungwon-intro.jwonnlee00.chatgpt.site",
+  "checkedAt": "2026-10-26T01:10:32.208Z",
+  "privateItemCount": 3,
+  "results": [
+    {
+      "path": "/",
+      "status": 200,
+      "privateContentAbsent": true
+    },
+    {
+      "path": "/private",
+      "status": 200,
+      "privateContentAbsent": true
+    },
+    {
+      "path": "/api/private/items",
+      "status": 401,
+      "privateContentAbsent": true
+    },
+    {
+      "path": "/api/private/items",
+      "status": 401,
+      "privateContentAbsent": true
+    }
+  ],
+  "clientScriptsChecked": 3
+}

@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/private",
+    "headers": {}
+  },
+  "status": 200,
+  "headers": {
+    "cache-control": "no-store, must-revalidate",
+    "content-encoding": "gzip",
+    "content-type": "text/html; charset=utf-8",
+    "transfer-encoding": "chunked",
+    "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Next-Router-Segment-Prefetch, Next-Url, X-Vinext-Interception-Context, X-Vinext-Mounted-Slots, X-Vinext-Rsc-Render-Mode"
+  },
+  "containsPrivateContent": false
+}
