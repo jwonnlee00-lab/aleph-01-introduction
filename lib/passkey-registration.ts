@@ -27,8 +27,14 @@ function fail(code: string, message: string, status = 400): never { throw json({
 export async function ownerIdentity() {
   const user = await getChatGPTUser();
   if (!user) fail("OWNER_SIGN_IN_REQUIRED", "등록하려면 먼저 소유자 계정으로 확인해 주세요.", 401);
-  if (!env.PASSKEY_OWNER_EMAIL) fail("SETUP_UNAVAILABLE", "소유자 등록 설정이 준비되지 않았습니다.", 503);
-  if (user.email.toLowerCase() !== env.PASSKEY_OWNER_EMAIL.toLowerCase()) fail("OWNER_ONLY", "이 사이트 소유자만 패스키를 등록할 수 있습니다.", 403);
+  // Once pinned by the operator, the Site-scoped authenticated ID is authoritative.
+  // Display/contact email can differ between the Sites owner profile and sign-in.
+  if (env.PASSKEY_OWNER_ID) {
+    if (user.userId !== env.PASSKEY_OWNER_ID) fail("OWNER_ONLY", "사이트 소유자 식별자가 일치하지 않습니다. 소유자 계정으로 다시 확인해 주세요.", 403);
+  } else {
+    if (!env.PASSKEY_OWNER_EMAIL) fail("SETUP_UNAVAILABLE", "소유자 등록 설정이 준비되지 않았습니다.", 503);
+    if (user.email.trim().toLowerCase() !== env.PASSKEY_OWNER_EMAIL.trim().toLowerCase()) fail("OWNER_ONLY", "이 사이트 소유자만 패스키를 등록할 수 있습니다.", 403);
+  }
   return user.userId;
 }
 function db() { if (!env.DB) fail("STORAGE_UNAVAILABLE", "저장소 연결을 확인해 주세요.", 503); return env.DB; }

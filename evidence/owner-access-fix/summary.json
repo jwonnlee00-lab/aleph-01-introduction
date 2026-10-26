@@ -1,0 +1,31 @@
+{
+  "fixtureOnly": true,
+  "checkedAt": "2026-10-26T01:43:19.261Z",
+  "results": [
+    {
+      "label": "pinned owner",
+      "expected": 200,
+      "actual": 200,
+      "error": null
+    },
+    {
+      "label": "same owner ID, changed contact email",
+      "expected": 200,
+      "actual": 200,
+      "error": null
+    },
+    {
+      "label": "different ID with matching owner email",
+      "expected": 403,
+      "actual": 403,
+      "error": "OWNER_ONLY"
+    },
+    {
+      "label": "anonymous",
+      "expected": 401,
+      "actual": 401,
+      "error": "OWNER_SIGN_IN_REQUIRED"
+    }
+  ],
+  "ownerPageWithChangedEmail": "registration form displayed"
+}
