@@ -28,3 +28,11 @@ export const registrationAttempts = sqliteTable("passkey_registration_attempts",
   credentialId: text("credential_id"),
   failureCode: text("failure_code"),
 });
+
+// Operator-assisted linking; the reference is not a login or enrollment token.
+export const ownerIdentityChecks = sqliteTable("owner_identity_checks", {
+  code: text("code").primaryKey(),
+  subjectId: text("subject_id").notNull(),
+  createdAt: integer("created_at").notNull(),
+  expiresAt: integer("expires_at").notNull(),
+});

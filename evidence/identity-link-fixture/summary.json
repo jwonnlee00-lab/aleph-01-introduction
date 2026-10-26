@@ -1,0 +1,12 @@
+{
+  "fixtureOnly": true,
+  "checkedAt": "2026-10-26T01:50:26.000Z",
+  "anonymousRejected": true,
+  "authenticatedReferenceIssued": true,
+  "referenceGrantsAccess": false,
+  "suppliedSubjectIdIgnored": true,
+  "repeatedReferenceStable": true,
+  "unlinkedSubjectStill403": true,
+  "operatorLinkedSubject200": true,
+  "deniedPageContainsLinkingButton": true
+}

@@ -8,6 +8,13 @@
       "when": 1792977469154,
       "tag": "0000_hard_komodo",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1792979311332,
+      "tag": "0001_purple_praxagora",
+      "breakpoints": true
     }
   ]
 }

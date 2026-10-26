@@ -1,6 +1,7 @@
 import { chatGPTSignInPath, chatGPTSignOutPath, getChatGPTUser } from "@/app/chatgpt-auth";
 import { ownerIdentity } from "@/lib/passkey-registration";
 import PasskeyRegistration from "./registration";
+import IdentityCheck from "./identity-check";
 
 export const dynamic = "force-dynamic";
 export default async function PasskeysPage() {
@@ -26,6 +27,7 @@ export default async function PasskeysPage() {
       <h2>소유자 확인이 필요합니다</h2>
       <p role="alert">{accessMessage}</p>
       <p className="registration-hint">확인 코드: {accessCode}</p>
+      {user && accessCode === "OWNER_ONLY" && <IdentityCheck />}
       <a className="registration-button" href={chatGPTSignInPath("/private/passkeys")} target="_top">소유자 ChatGPT 계정으로 확인</a>
       {user && <a className="registration-secondary" href={chatGPTSignOutPath("/private/passkeys")} target="_top">사이트 로그인 해제</a>}
       <p className="registration-hint">이 확인은 등록 권한만 확인합니다. 개인 공간을 열거나 사이트 비밀번호를 만들지 않습니다.</p>

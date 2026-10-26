@@ -30,12 +30,28 @@ export async function ownerIdentity() {
   // Once pinned by the operator, the Site-scoped authenticated ID is authoritative.
   // Display/contact email can differ between the Sites owner profile and sign-in.
   if (env.PASSKEY_OWNER_ID) {
-    if (user.userId !== env.PASSKEY_OWNER_ID) fail("OWNER_ONLY", "사이트 소유자 식별자가 일치하지 않습니다. 소유자 계정으로 다시 확인해 주세요.", 403);
+    const linked = env.PASSKEY_OWNER_LINKED_IDS ? z.array(z.string()).max(5).parse(JSON.parse(env.PASSKEY_OWNER_LINKED_IDS)) : [];
+    if (user.userId !== env.PASSKEY_OWNER_ID && !linked.includes(user.userId)) fail("OWNER_ONLY", "현재 브라우저의 로그인 식별자가 아직 소유자와 연결되지 않았습니다. 아래 확인 번호로 연결을 요청해 주세요.", 403);
+    return env.PASSKEY_OWNER_ID;
   } else {
     if (!env.PASSKEY_OWNER_EMAIL) fail("SETUP_UNAVAILABLE", "소유자 등록 설정이 준비되지 않았습니다.", 503);
     if (user.email.trim().toLowerCase() !== env.PASSKEY_OWNER_EMAIL.trim().toLowerCase()) fail("OWNER_ONLY", "이 사이트 소유자만 패스키를 등록할 수 있습니다.", 403);
   }
   return user.userId;
+}
+
+export async function createIdentityCheck(request: Request) {
+  await body(request); mutationOrigin(request);
+  const user = await getChatGPTUser();
+  if (!user) fail("OWNER_SIGN_IN_REQUIRED", "먼저 ChatGPT 계정으로 확인해 주세요.", 401);
+  const database = db(); const now = Date.now();
+  await database.prepare("DELETE FROM owner_identity_checks WHERE expires_at <= ?").bind(now).run();
+  const existing = await database.prepare("SELECT code, expires_at FROM owner_identity_checks WHERE subject_id = ? AND expires_at > ? LIMIT 1").bind(user.userId, now).first<{code:string;expires_at:number}>();
+  if (existing) return json({ code: existing.code, expiresAt: existing.expires_at, grantsAccess: false });
+  const code = Array.from(crypto.getRandomValues(new Uint8Array(8)), byte => byte.toString(16).padStart(2, "0")).join("").toUpperCase();
+  const expiresAt = now + 15 * 60000;
+  await database.prepare("INSERT INTO owner_identity_checks (code, subject_id, created_at, expires_at) VALUES (?, ?, ?, ?)").bind(code, user.userId, now, expiresAt).run();
+  return json({ code, expiresAt, grantsAccess: false });
 }
 function db() { if (!env.DB) fail("STORAGE_UNAVAILABLE", "저장소 연결을 확인해 주세요.", 503); return env.DB; }
 function originFor(request: Request) {
