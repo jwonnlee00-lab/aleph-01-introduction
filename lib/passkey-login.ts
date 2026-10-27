@@ -81,7 +81,7 @@ export async function getPrivateSession(request?: Request): Promise<PrivateSessi
   const local = request ? localOrigin(originFor(request)) : /^(localhost|127\.0\.0\.1):\d+$/.test(incoming.get("host") ?? "");
   const token = cookieValue(incoming.get("cookie"), cookieName("session", local));
   if (!token || !/^[A-Za-z0-9_-]{43}$/.test(token)) return null;
-  return db().prepare("SELECT s.owner_id, s.credential_id, s.created_at, s.expires_at, s.session_hash FROM passkey_sessions s JOIN passkeys p ON p.credential_id = s.credential_id AND p.owner_id = s.owner_id WHERE s.session_hash = ? AND s.revoked_at IS NULL AND s.expires_at > ?").bind(await hash(token), Date.now()).first<PrivateSession>();
+  return db().prepare("SELECT s.owner_id, s.credential_id, s.created_at, s.expires_at, s.session_hash FROM passkey_sessions s JOIN passkeys p ON p.credential_id = s.credential_id AND p.owner_id = s.owner_id WHERE s.session_hash = ? AND s.owner_id = ? AND s.revoked_at IS NULL AND s.expires_at > ?").bind(await hash(token), ownerId(), Date.now()).first<PrivateSession>();
 }
 export async function logout(request: Request) {
   await body(request); const origin = mutationOrigin(request); const session = await getPrivateSession(request);

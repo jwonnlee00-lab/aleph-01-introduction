@@ -1,0 +1,23 @@
+{
+  "fixtureOnly": true,
+  "checkedAt": "2026-10-27T01:41:22.225Z",
+  "requests": 45,
+  "twoAccountsRegistered": true,
+  "bothDirections403": true,
+  "foreignKeys401": true,
+  "urlAndBodySpoofIgnored": true,
+  "countsBeforeAndAfter": {
+    "a": [
+      3,
+      3
+    ],
+    "b": [
+      3,
+      3
+    ]
+  },
+  "replay409": true,
+  "mainSpaceIsolated": true,
+  "logoutOldCookie401": true,
+  "cookiesMasked": true
+}

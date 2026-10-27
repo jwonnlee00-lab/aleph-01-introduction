@@ -1,0 +1,1179 @@
+[
+  {
+    "case": "anonymous A data",
+    "request": {
+      "method": "GET",
+      "path": "/api/exercise/items?account=a"
+    },
+    "response": {
+      "status": 401,
+      "body": {
+        "error": "AUTH_REQUIRED",
+        "message": "시험 계정의 패스키 로그인이 필요합니다."
+      }
+    }
+  },
+  {
+    "case": "anonymous registration forbidden",
+    "request": {
+      "method": "POST",
+      "path": "/api/exercise/register-options",
+      "body": {
+        "account": "a"
+      }
+    },
+    "response": {
+      "status": 403,
+      "body": {
+        "error": "RECENT_PASSKEY_REQUIRED",
+        "message": "키 추가·삭제 전에 패스키로 다시 로그인해 주세요. 로그인 후 10분 동안 변경할 수 있습니다."
+      }
+    }
+  },
+  {
+    "case": "main admin login question",
+    "request": {
+      "method": "POST",
+      "path": "/api/passkeys/login/options",
+      "body": {}
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "attemptId": "xiKrtAaDQsjRCL0zPxHkrHHbAv4unkLSURFt1yewLzE",
+        "options": {
+          "rpId": "localhost",
+          "challenge": "ibTgkZJ5FsWksr9p8N_h5jpryi7EpouFoG_fFqKEN2s",
+          "timeout": 120000,
+          "userVerification": "required"
+        },
+        "expiresAt": 1793065581830
+      },
+      "setCookie": "[REDACTED]"
+    }
+  },
+  {
+    "case": "main admin signed login",
+    "request": {
+      "method": "POST",
+      "path": "/api/passkeys/login/verify",
+      "Cookie": "[REDACTED]",
+      "body": {
+        "attemptId": "[FIXTURE ATTEMPT]",
+        "credential": "[SOFTWARE FIXTURE RESPONSE OMITTED]"
+      }
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "verified": true,
+        "session": {
+          "type": "server-side",
+          "expiresAt": 1793068881857
+        },
+        "next": "/private"
+      },
+      "setCookie": "[REDACTED]"
+    }
+  },
+  {
+    "case": "owner may enroll test accounts",
+    "request": {
+      "method": "GET",
+      "path": "/api/exercise/status",
+      "Cookie": "[REDACTED]"
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "canManage": true,
+        "currentAccount": null,
+        "resourceCounts": {
+          "a": 3,
+          "b": 3
+        },
+        "accounts": [
+          {
+            "id": "a",
+            "label": "userA@aleph.com",
+            "keys": []
+          },
+          {
+            "id": "b",
+            "label": "userB@example.test",
+            "keys": []
+          }
+        ]
+      }
+    }
+  },
+  {
+    "case": "a registration question",
+    "request": {
+      "method": "POST",
+      "path": "/api/exercise/register-options",
+      "Cookie": "[REDACTED]",
+      "body": {
+        "account": "a"
+      }
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "attemptId": "6PHSKse1KYlTSS5OVMzNeueSjCgaV5Ti2kXRhVJXOoM",
+        "options": {
+          "challenge": "2vqmA4INzFiExmnOhDmloaspIOuHtsGyTAu-H3tUNmM",
+          "rp": {
+            "name": "정원의 계정 격리 시험",
+            "id": "localhost"
+          },
+          "user": {
+            "id": "UDJsUUVpcDFYdnRFaDc5Ujh2cDh4Z0M4YTJ1OEZyOVhmLUJnc3o0eTNyWQ",
+            "name": "userA@aleph.com",
+            "displayName": "시험 계정 A"
+          },
+          "pubKeyCredParams": [
+            {
+              "alg": -7,
+              "type": "public-key"
+            },
+            {
+              "alg": -257,
+              "type": "public-key"
+            }
+          ],
+          "timeout": 60000,
+          "attestation": "none",
+          "excludeCredentials": [],
+          "authenticatorSelection": {
+            "residentKey": "required",
+            "userVerification": "required",
+            "requireResidentKey": true
+          },
+          "extensions": {
+            "credProps": true
+          },
+          "hints": []
+        }
+      },
+      "setCookie": "[REDACTED]"
+    }
+  },
+  {
+    "case": "a registration verified",
+    "request": {
+      "method": "POST",
+      "path": "/api/exercise/register-verify",
+      "Cookie": "[REDACTED]",
+      "body": {
+        "account": "a",
+        "attemptId": "[FIXTURE ATTEMPT]",
+        "credential": "[SOFTWARE FIXTURE RESPONSE OMITTED]"
+      }
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "verified": true,
+        "account": "a"
+      }
+    }
+  },
+  {
+    "case": "a registration replay rejected",
+    "request": {
+      "method": "POST",
+      "path": "/api/exercise/register-verify",
+      "Cookie": "[REDACTED]",
+      "body": {
+        "account": "a",
+        "attemptId": "[FIXTURE ATTEMPT]",
+        "credential": "[SOFTWARE FIXTURE RESPONSE OMITTED]"
+      }
+    },
+    "response": {
+      "status": 409,
+      "body": {
+        "error": "CHALLENGE_UNAVAILABLE",
+        "message": "이미 사용했거나 만료된 등록 질문입니다."
+      }
+    }
+  },
+  {
+    "case": "b registration question",
+    "request": {
+      "method": "POST",
+      "path": "/api/exercise/register-options",
+      "Cookie": "[REDACTED]",
+      "body": {
+        "account": "b"
+      }
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "attemptId": "VLz17_KQhuZ1Zm6MAEMLdweYqcevREaaQITD8MtzzQE",
+        "options": {
+          "challenge": "uixOzCt90JT6T522O0d8hRMh_DXA-pMXFUIoZtRWy2A",
+          "rp": {
+            "name": "정원의 계정 격리 시험",
+            "id": "localhost"
+          },
+          "user": {
+            "id": "alluS0Q3LVBxNWN3YVQ2RkFYVEk3c29rRmRXeHdaWnNiQWhlM0lValROdw",
+            "name": "userB@example.test",
+            "displayName": "시험 계정 B"
+          },
+          "pubKeyCredParams": [
+            {
+              "alg": -7,
+              "type": "public-key"
+            },
+            {
+              "alg": -257,
+              "type": "public-key"
+            }
+          ],
+          "timeout": 60000,
+          "attestation": "none",
+          "excludeCredentials": [],
+          "authenticatorSelection": {
+            "residentKey": "required",
+            "userVerification": "required",
+            "requireResidentKey": true
+          },
+          "extensions": {
+            "credProps": true
+          },
+          "hints": []
+        }
+      },
+      "setCookie": "[REDACTED]"
+    }
+  },
+  {
+    "case": "b registration verified",
+    "request": {
+      "method": "POST",
+      "path": "/api/exercise/register-verify",
+      "Cookie": "[REDACTED]",
+      "body": {
+        "account": "b",
+        "attemptId": "[FIXTURE ATTEMPT]",
+        "credential": "[SOFTWARE FIXTURE RESPONSE OMITTED]"
+      }
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "verified": true,
+        "account": "b"
+      }
+    }
+  },
+  {
+    "case": "b registration replay rejected",
+    "request": {
+      "method": "POST",
+      "path": "/api/exercise/register-verify",
+      "Cookie": "[REDACTED]",
+      "body": {
+        "account": "b",
+        "attemptId": "[FIXTURE ATTEMPT]",
+        "credential": "[SOFTWARE FIXTURE RESPONSE OMITTED]"
+      }
+    },
+    "response": {
+      "status": 409,
+      "body": {
+        "error": "CHALLENGE_UNAVAILABLE",
+        "message": "이미 사용했거나 만료된 등록 질문입니다."
+      }
+    }
+  },
+  {
+    "case": "duplicate enrollment rejected",
+    "request": {
+      "method": "POST",
+      "path": "/api/exercise/register-options",
+      "Cookie": "[REDACTED]",
+      "body": {
+        "account": "a"
+      }
+    },
+    "response": {
+      "status": 409,
+      "body": {
+        "error": "ALREADY_REGISTERED",
+        "message": "이 시험 계정에는 이미 키가 있습니다. 로그인으로 확인하세요."
+      }
+    }
+  },
+  {
+    "case": "a challenge for foreign key",
+    "request": {
+      "method": "POST",
+      "path": "/api/exercise/login-options",
+      "Cookie": "[REDACTED]",
+      "body": {
+        "account": "a"
+      }
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "attemptId": "0PsueDgchZCTQ68gth9Vz89YXXQ-qzG6kebSc_JiJLE",
+        "options": {
+          "rpId": "localhost",
+          "challenge": "4d55wl8-y_udNv8Y4x10N8tWQ23M2oVNvWl0PRDONY8",
+          "allowCredentials": [
+            {
+              "id": "nQFP6Rwd8jmAFfMEoY9fibpIq0omS2OkTH-3Ixwt_2M",
+              "transports": [
+                "internal"
+              ],
+              "type": "public-key"
+            }
+          ],
+          "timeout": 60000,
+          "userVerification": "required"
+        }
+      },
+      "setCookie": "[REDACTED]"
+    }
+  },
+  {
+    "case": "b key cannot login as a",
+    "request": {
+      "method": "POST",
+      "path": "/api/exercise/login-verify",
+      "Cookie": "[REDACTED]",
+      "body": {
+        "account": "a",
+        "attemptId": "[FIXTURE ATTEMPT]",
+        "credential": "[SOFTWARE FIXTURE RESPONSE OMITTED]"
+      }
+    },
+    "response": {
+      "status": 401,
+      "body": {
+        "error": "UNKNOWN_PASSKEY",
+        "message": "이 시험 계정에 등록한 패스키만 사용할 수 있습니다."
+      }
+    }
+  },
+  {
+    "case": "a login challenge",
+    "request": {
+      "method": "POST",
+      "path": "/api/exercise/login-options",
+      "Cookie": "[REDACTED]",
+      "body": {
+        "account": "a"
+      }
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "attemptId": "Js6_frLX2tLD8d5M_9P4fC0SFk0pEW1nKrfBAbRwfvs",
+        "options": {
+          "rpId": "localhost",
+          "challenge": "CFUg4YTTsb8DYZuOuZklgVmW9beyWdfFTYzBHEqDEpc",
+          "allowCredentials": [
+            {
+              "id": "nQFP6Rwd8jmAFfMEoY9fibpIq0omS2OkTH-3Ixwt_2M",
+              "transports": [
+                "internal"
+              ],
+              "type": "public-key"
+            }
+          ],
+          "timeout": 60000,
+          "userVerification": "required"
+        }
+      },
+      "setCookie": "[REDACTED]"
+    }
+  },
+  {
+    "case": "a signed login success",
+    "request": {
+      "method": "POST",
+      "path": "/api/exercise/login-verify",
+      "Cookie": "[REDACTED]",
+      "body": {
+        "account": "a",
+        "attemptId": "[FIXTURE ATTEMPT]",
+        "credential": "[SOFTWARE FIXTURE RESPONSE OMITTED]"
+      }
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "verified": true,
+        "account": "a",
+        "session": {
+          "type": "server-side",
+          "expiresAt": 1793068881997
+        }
+      },
+      "setCookie": "[REDACTED]"
+    }
+  },
+  {
+    "case": "a challenge replay rejected",
+    "request": {
+      "method": "POST",
+      "path": "/api/exercise/login-verify",
+      "Cookie": "[REDACTED]",
+      "body": {
+        "account": "a",
+        "attemptId": "[FIXTURE ATTEMPT]",
+        "credential": "[SOFTWARE FIXTURE RESPONSE OMITTED]"
+      }
+    },
+    "response": {
+      "status": 409,
+      "body": {
+        "error": "CHALLENGE_UNAVAILABLE",
+        "message": "이미 사용했거나 만료된 로그인 질문입니다."
+      }
+    }
+  },
+  {
+    "case": "a own resources before",
+    "request": {
+      "method": "GET",
+      "path": "/api/exercise/items?account=a",
+      "Cookie": "[REDACTED]"
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "account": "a",
+        "items": [
+          {
+            "id": "a-1",
+            "title": "A의 프로젝트",
+            "body": "가상 별빛 지도 만들기"
+          },
+          {
+            "id": "a-2",
+            "title": "A의 연습",
+            "body": "퍼즐 화면 한 장 완성"
+          },
+          {
+            "id": "a-3",
+            "title": "A의 회고",
+            "body": "작은 기능부터 확인하기"
+          }
+        ],
+        "count": 3
+      }
+    }
+  },
+  {
+    "case": "a cannot read b",
+    "request": {
+      "method": "GET",
+      "path": "/api/exercise/items?account=b",
+      "Cookie": "[REDACTED]"
+    },
+    "response": {
+      "status": 403,
+      "body": {
+        "error": "FORBIDDEN_ACCOUNT",
+        "message": "다른 시험 계정의 자료는 조회할 수 없습니다."
+      }
+    }
+  },
+  {
+    "case": "a own resources after",
+    "request": {
+      "method": "GET",
+      "path": "/api/exercise/items?account=a",
+      "Cookie": "[REDACTED]"
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "account": "a",
+        "items": [
+          {
+            "id": "a-1",
+            "title": "A의 프로젝트",
+            "body": "가상 별빛 지도 만들기"
+          },
+          {
+            "id": "a-2",
+            "title": "A의 연습",
+            "body": "퍼즐 화면 한 장 완성"
+          },
+          {
+            "id": "a-3",
+            "title": "A의 회고",
+            "body": "작은 기능부터 확인하기"
+          }
+        ],
+        "count": 3
+      }
+    }
+  },
+  {
+    "case": "a URL spoof returns only self",
+    "request": {
+      "method": "GET",
+      "path": "/api/exercise/own-items?account=b",
+      "Cookie": "[REDACTED]"
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "account": "a",
+        "items": [
+          {
+            "id": "a-1",
+            "title": "A의 프로젝트",
+            "body": "가상 별빛 지도 만들기"
+          },
+          {
+            "id": "a-2",
+            "title": "A의 연습",
+            "body": "퍼즐 화면 한 장 완성"
+          },
+          {
+            "id": "a-3",
+            "title": "A의 회고",
+            "body": "작은 기능부터 확인하기"
+          }
+        ],
+        "count": 3
+      }
+    }
+  },
+  {
+    "case": "a body spoof returns only self",
+    "request": {
+      "method": "POST",
+      "path": "/api/exercise/own-items",
+      "Cookie": "[REDACTED]",
+      "body": {
+        "account": "b",
+        "owner_id": "b"
+      }
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "account": "a",
+        "items": [
+          {
+            "id": "a-1",
+            "title": "A의 프로젝트",
+            "body": "가상 별빛 지도 만들기"
+          },
+          {
+            "id": "a-2",
+            "title": "A의 연습",
+            "body": "퍼즐 화면 한 장 완성"
+          },
+          {
+            "id": "a-3",
+            "title": "A의 회고",
+            "body": "작은 기능부터 확인하기"
+          }
+        ],
+        "count": 3
+      }
+    }
+  },
+  {
+    "case": "b challenge for foreign key",
+    "request": {
+      "method": "POST",
+      "path": "/api/exercise/login-options",
+      "Cookie": "[REDACTED]",
+      "body": {
+        "account": "b"
+      }
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "attemptId": "GGqGsx8yNUJ74tbKlIkYdyq0GgUJzKvIhCMyw6TZTX8",
+        "options": {
+          "rpId": "localhost",
+          "challenge": "hHjjtP8pPL531HJyIviLCLQndO292sMYt8MGfieblUk",
+          "allowCredentials": [
+            {
+              "id": "ozdIrbOfHRqjhNLnKyr1vK4BiZbvW7rKJgQU2sbFrRE",
+              "transports": [
+                "internal"
+              ],
+              "type": "public-key"
+            }
+          ],
+          "timeout": 60000,
+          "userVerification": "required"
+        }
+      },
+      "setCookie": "[REDACTED]"
+    }
+  },
+  {
+    "case": "a key cannot login as b",
+    "request": {
+      "method": "POST",
+      "path": "/api/exercise/login-verify",
+      "Cookie": "[REDACTED]",
+      "body": {
+        "account": "b",
+        "attemptId": "[FIXTURE ATTEMPT]",
+        "credential": "[SOFTWARE FIXTURE RESPONSE OMITTED]"
+      }
+    },
+    "response": {
+      "status": 401,
+      "body": {
+        "error": "UNKNOWN_PASSKEY",
+        "message": "이 시험 계정에 등록한 패스키만 사용할 수 있습니다."
+      }
+    }
+  },
+  {
+    "case": "b login challenge",
+    "request": {
+      "method": "POST",
+      "path": "/api/exercise/login-options",
+      "Cookie": "[REDACTED]",
+      "body": {
+        "account": "b"
+      }
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "attemptId": "LMQYdLF3Frz6xfAuxxGimRF_hqRKcwqV3y3hl8DMwp8",
+        "options": {
+          "rpId": "localhost",
+          "challenge": "q0lfF3F7un7MU-7axhbhWn2_JxK-q0dypF1hetGPW9s",
+          "allowCredentials": [
+            {
+              "id": "ozdIrbOfHRqjhNLnKyr1vK4BiZbvW7rKJgQU2sbFrRE",
+              "transports": [
+                "internal"
+              ],
+              "type": "public-key"
+            }
+          ],
+          "timeout": 60000,
+          "userVerification": "required"
+        }
+      },
+      "setCookie": "[REDACTED]"
+    }
+  },
+  {
+    "case": "b signed login success",
+    "request": {
+      "method": "POST",
+      "path": "/api/exercise/login-verify",
+      "Cookie": "[REDACTED]",
+      "body": {
+        "account": "b",
+        "attemptId": "[FIXTURE ATTEMPT]",
+        "credential": "[SOFTWARE FIXTURE RESPONSE OMITTED]"
+      }
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "verified": true,
+        "account": "b",
+        "session": {
+          "type": "server-side",
+          "expiresAt": 1793068882076
+        }
+      },
+      "setCookie": "[REDACTED]"
+    }
+  },
+  {
+    "case": "b challenge replay rejected",
+    "request": {
+      "method": "POST",
+      "path": "/api/exercise/login-verify",
+      "Cookie": "[REDACTED]",
+      "body": {
+        "account": "b",
+        "attemptId": "[FIXTURE ATTEMPT]",
+        "credential": "[SOFTWARE FIXTURE RESPONSE OMITTED]"
+      }
+    },
+    "response": {
+      "status": 409,
+      "body": {
+        "error": "CHALLENGE_UNAVAILABLE",
+        "message": "이미 사용했거나 만료된 로그인 질문입니다."
+      }
+    }
+  },
+  {
+    "case": "b own resources before",
+    "request": {
+      "method": "GET",
+      "path": "/api/exercise/items?account=b",
+      "Cookie": "[REDACTED]"
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "account": "b",
+        "items": [
+          {
+            "id": "b-1",
+            "title": "B의 프로젝트",
+            "body": "가상 구름 도서관 만들기"
+          },
+          {
+            "id": "b-2",
+            "title": "B의 연습",
+            "body": "책갈피 화면 두 장 완성"
+          },
+          {
+            "id": "b-3",
+            "title": "B의 회고",
+            "body": "오류 응답부터 살펴보기"
+          }
+        ],
+        "count": 3
+      }
+    }
+  },
+  {
+    "case": "b cannot read a",
+    "request": {
+      "method": "GET",
+      "path": "/api/exercise/items?account=a",
+      "Cookie": "[REDACTED]"
+    },
+    "response": {
+      "status": 403,
+      "body": {
+        "error": "FORBIDDEN_ACCOUNT",
+        "message": "다른 시험 계정의 자료는 조회할 수 없습니다."
+      }
+    }
+  },
+  {
+    "case": "b own resources after",
+    "request": {
+      "method": "GET",
+      "path": "/api/exercise/items?account=b",
+      "Cookie": "[REDACTED]"
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "account": "b",
+        "items": [
+          {
+            "id": "b-1",
+            "title": "B의 프로젝트",
+            "body": "가상 구름 도서관 만들기"
+          },
+          {
+            "id": "b-2",
+            "title": "B의 연습",
+            "body": "책갈피 화면 두 장 완성"
+          },
+          {
+            "id": "b-3",
+            "title": "B의 회고",
+            "body": "오류 응답부터 살펴보기"
+          }
+        ],
+        "count": 3
+      }
+    }
+  },
+  {
+    "case": "b URL spoof returns only self",
+    "request": {
+      "method": "GET",
+      "path": "/api/exercise/own-items?account=a",
+      "Cookie": "[REDACTED]"
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "account": "b",
+        "items": [
+          {
+            "id": "b-1",
+            "title": "B의 프로젝트",
+            "body": "가상 구름 도서관 만들기"
+          },
+          {
+            "id": "b-2",
+            "title": "B의 연습",
+            "body": "책갈피 화면 두 장 완성"
+          },
+          {
+            "id": "b-3",
+            "title": "B의 회고",
+            "body": "오류 응답부터 살펴보기"
+          }
+        ],
+        "count": 3
+      }
+    }
+  },
+  {
+    "case": "b body spoof returns only self",
+    "request": {
+      "method": "POST",
+      "path": "/api/exercise/own-items",
+      "Cookie": "[REDACTED]",
+      "body": {
+        "account": "a",
+        "owner_id": "a"
+      }
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "account": "b",
+        "items": [
+          {
+            "id": "b-1",
+            "title": "B의 프로젝트",
+            "body": "가상 구름 도서관 만들기"
+          },
+          {
+            "id": "b-2",
+            "title": "B의 연습",
+            "body": "책갈피 화면 두 장 완성"
+          },
+          {
+            "id": "b-3",
+            "title": "B의 회고",
+            "body": "오류 응답부터 살펴보기"
+          }
+        ],
+        "count": 3
+      }
+    }
+  },
+  {
+    "case": "a login challenge",
+    "request": {
+      "method": "POST",
+      "path": "/api/exercise/login-options",
+      "Cookie": "[REDACTED]",
+      "body": {
+        "account": "a"
+      }
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "attemptId": "5VJTs3B4owTYNB8at4wIBRi6Afi6uvMg9XLQZPD7KWA",
+        "options": {
+          "rpId": "localhost",
+          "challenge": "phscp6Ja3tsbTVYvPnqL-d5YU4PE9eDxH14XzQ1dRd8",
+          "allowCredentials": [
+            {
+              "id": "nQFP6Rwd8jmAFfMEoY9fibpIq0omS2OkTH-3Ixwt_2M",
+              "transports": [
+                "internal"
+              ],
+              "type": "public-key"
+            }
+          ],
+          "timeout": 60000,
+          "userVerification": "required"
+        }
+      },
+      "setCookie": "[REDACTED]"
+    }
+  },
+  {
+    "case": "a signed login success",
+    "request": {
+      "method": "POST",
+      "path": "/api/exercise/login-verify",
+      "Cookie": "[REDACTED]",
+      "body": {
+        "account": "a",
+        "attemptId": "[FIXTURE ATTEMPT]",
+        "credential": "[SOFTWARE FIXTURE RESPONSE OMITTED]"
+      }
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "verified": true,
+        "account": "a",
+        "session": {
+          "type": "server-side",
+          "expiresAt": 1793068882139
+        }
+      },
+      "setCookie": "[REDACTED]"
+    }
+  },
+  {
+    "case": "a challenge replay rejected",
+    "request": {
+      "method": "POST",
+      "path": "/api/exercise/login-verify",
+      "Cookie": "[REDACTED]",
+      "body": {
+        "account": "a",
+        "attemptId": "[FIXTURE ATTEMPT]",
+        "credential": "[SOFTWARE FIXTURE RESPONSE OMITTED]"
+      }
+    },
+    "response": {
+      "status": 409,
+      "body": {
+        "error": "CHALLENGE_UNAVAILABLE",
+        "message": "이미 사용했거나 만료된 로그인 질문입니다."
+      }
+    }
+  },
+  {
+    "case": "A count unchanged after B cross-read attempt",
+    "request": {
+      "method": "GET",
+      "path": "/api/exercise/items?account=a",
+      "Cookie": "[REDACTED]"
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "account": "a",
+        "items": [
+          {
+            "id": "a-1",
+            "title": "A의 프로젝트",
+            "body": "가상 별빛 지도 만들기"
+          },
+          {
+            "id": "a-2",
+            "title": "A의 연습",
+            "body": "퍼즐 화면 한 장 완성"
+          },
+          {
+            "id": "a-3",
+            "title": "A의 회고",
+            "body": "작은 기능부터 확인하기"
+          }
+        ],
+        "count": 3
+      }
+    }
+  },
+  {
+    "case": "b login challenge",
+    "request": {
+      "method": "POST",
+      "path": "/api/exercise/login-options",
+      "Cookie": "[REDACTED]",
+      "body": {
+        "account": "b"
+      }
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "attemptId": "M2khM8rfnXK2EFM5WO2liDMIml5nYlPbdxqWiu_s6Yc",
+        "options": {
+          "rpId": "localhost",
+          "challenge": "7JMTQY5-LsIeNKCgvOEL5qmTgDryv73OPs8WTfnYPXk",
+          "allowCredentials": [
+            {
+              "id": "ozdIrbOfHRqjhNLnKyr1vK4BiZbvW7rKJgQU2sbFrRE",
+              "transports": [
+                "internal"
+              ],
+              "type": "public-key"
+            }
+          ],
+          "timeout": 60000,
+          "userVerification": "required"
+        }
+      },
+      "setCookie": "[REDACTED]"
+    }
+  },
+  {
+    "case": "b signed login success",
+    "request": {
+      "method": "POST",
+      "path": "/api/exercise/login-verify",
+      "Cookie": "[REDACTED]",
+      "body": {
+        "account": "b",
+        "attemptId": "[FIXTURE ATTEMPT]",
+        "credential": "[SOFTWARE FIXTURE RESPONSE OMITTED]"
+      }
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "verified": true,
+        "account": "b",
+        "session": {
+          "type": "server-side",
+          "expiresAt": 1793068882178
+        }
+      },
+      "setCookie": "[REDACTED]"
+    }
+  },
+  {
+    "case": "b challenge replay rejected",
+    "request": {
+      "method": "POST",
+      "path": "/api/exercise/login-verify",
+      "Cookie": "[REDACTED]",
+      "body": {
+        "account": "b",
+        "attemptId": "[FIXTURE ATTEMPT]",
+        "credential": "[SOFTWARE FIXTURE RESPONSE OMITTED]"
+      }
+    },
+    "response": {
+      "status": 409,
+      "body": {
+        "error": "CHALLENGE_UNAVAILABLE",
+        "message": "이미 사용했거나 만료된 로그인 질문입니다."
+      }
+    }
+  },
+  {
+    "case": "B count unchanged after A cross-read attempt",
+    "request": {
+      "method": "GET",
+      "path": "/api/exercise/items?account=b",
+      "Cookie": "[REDACTED]"
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "account": "b",
+        "items": [
+          {
+            "id": "b-1",
+            "title": "B의 프로젝트",
+            "body": "가상 구름 도서관 만들기"
+          },
+          {
+            "id": "b-2",
+            "title": "B의 연습",
+            "body": "책갈피 화면 두 장 완성"
+          },
+          {
+            "id": "b-3",
+            "title": "B의 회고",
+            "body": "오류 응답부터 살펴보기"
+          }
+        ],
+        "count": 3
+      }
+    }
+  },
+  {
+    "case": "lab token renamed cannot open main private data",
+    "request": {
+      "method": "GET",
+      "path": "/api/private/items",
+      "Cookie": "[REDACTED]"
+    },
+    "response": {
+      "status": 401,
+      "body": {
+        "error": "AUTH_REQUIRED",
+        "message": "패스키 로그인이 필요합니다. 현재는 잠금 상태입니다."
+      }
+    }
+  },
+  {
+    "case": "main token renamed cannot open lab data",
+    "request": {
+      "method": "GET",
+      "path": "/api/exercise/items?account=a",
+      "Cookie": "[REDACTED]"
+    },
+    "response": {
+      "status": 401,
+      "body": {
+        "error": "AUTH_REQUIRED",
+        "message": "시험 계정의 패스키 로그인이 필요합니다."
+      }
+    }
+  },
+  {
+    "case": "main original session still works",
+    "request": {
+      "method": "GET",
+      "path": "/api/private/items",
+      "Cookie": "[REDACTED]"
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "items": [
+          {
+            "id": "project",
+            "title": "음식 취향",
+            "body": "부산 사람이지만 돼지 내장 들어간 국밥을 잘 못 먹음"
+          },
+          {
+            "id": "applications",
+            "title": "노래 취향",
+            "body": "국내 발라드 정말 안 좋아함"
+          },
+          {
+            "id": "reflection",
+            "title": "취향 회고",
+            "body": "치이카와에서 아노코가 제일 귀엽다고 생각함"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "case": "exercise logout",
+    "request": {
+      "method": "POST",
+      "path": "/api/exercise/logout",
+      "Cookie": "[REDACTED]",
+      "body": {}
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "loggedOut": true
+      },
+      "setCookie": "[REDACTED]"
+    }
+  },
+  {
+    "case": "old lab session rejected",
+    "request": {
+      "method": "GET",
+      "path": "/api/exercise/items?account=b",
+      "Cookie": "[REDACTED]"
+    },
+    "response": {
+      "status": 401,
+      "body": {
+        "error": "AUTH_REQUIRED",
+        "message": "시험 계정의 패스키 로그인이 필요합니다."
+      }
+    }
+  }
+]

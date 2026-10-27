@@ -26,6 +26,7 @@ export default async function PrivateSpace({searchParams}: {searchParams?: Promi
         <PasskeyLogin />
       </>}
       <p><a className="registration-button" href="/private/passkeys">패스키 등록·목록 →</a></p>
+      <p><a className="private-link" href="/private/exercise">시험 계정 A·B의 자료 격리 확인 →</a></p>
       <a className="private-link" href="/api/private/items">서버 자료 요청 확인하기 →</a>
     </main>
   );
