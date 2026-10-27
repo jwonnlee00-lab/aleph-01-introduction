@@ -29,10 +29,11 @@ const loginInput=registrationInput;
 export async function exercise(request:Request,action:string):Promise<Response>{
   const database=db();
   if(action==="status"){
-    let canManage=false;try{await admin(request);canManage=true;}catch(e){if(!(e instanceof Response))throw e;}
+    let canManage=false;let managementError:{error:string;message:string}|null=null;
+    try{await admin(request);canManage=true;}catch(e){if(!(e instanceof Response))throw e;managementError=await e.json() as {error:string;message:string};}
     const keys=await database.prepare("SELECT owner_id,name,created_at FROM passkeys WHERE owner_id IN (?,?) ORDER BY created_at").bind(accountOwner("a"),accountOwner("b")).all<{owner_id:string;name:string;created_at:number}>();
     const s=await session(request);
-    return json({canManage,currentAccount:s?(s.owner_id===accountOwner("a")?"a":"b"):null,resourceCounts:canManage?{a:notes.a.length,b:notes.b.length}:null,accounts:(["a","b"] as const).map(id=>({id,label:labels[id],keys:keys.results.filter(k=>k.owner_id===accountOwner(id)).map(k=>({name:k.name,createdAt:k.created_at}))}))});
+    return json({canManage,managementError,currentAccount:s?(s.owner_id===accountOwner("a")?"a":"b"):null,resourceCounts:canManage?{a:notes.a.length,b:notes.b.length}:null,accounts:(["a","b"] as const).map(id=>({id,label:labels[id],keys:keys.results.filter(k=>k.owner_id===accountOwner(id)).map(k=>({name:k.name,createdAt:k.created_at}))}))});
   }
   if(action==="items"||action==="own-items"){
     const s=await currentAccount(request);
